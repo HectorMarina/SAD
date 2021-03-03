@@ -12,7 +12,7 @@ public class EditableBufferReader extends BufferedReader {
 
     public static void main(String args[]) {
         
-        EditableBufferReader prueba = new EditableBufferReader(reader);
+        EditableBufferReader prueba = new EditableBufferReader();
         prueba.setRaw();
     }
 
@@ -23,9 +23,6 @@ public class EditableBufferReader extends BufferedReader {
         } catch (IOException ex) {
             System.out.println("Error al pasar al modo Raw");
         }
-    }
-    //http://lineadecodigo.com/java/como-ejecutar-un-comando-del-sistema-desde-java/
-    //http://www.chuidiang.org/java/ejemplos/Runtime/runtime.php
 
     public void unsetRaw() {
         try {
