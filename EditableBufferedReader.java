@@ -83,13 +83,19 @@ public class EditableBufferedReader extends BufferedReader {
         
         return integer;
     }
-    
-    public String readLine () {
+    @Override
+    public String readLine() throws IOException {
+        this.setRaw();
+        //bucle hasta intro/// utilizar el metodo read para editar
+        this.unsetRaw();
+        return line.getLine();
+    }
+   /* public String readLine () {
         BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
         String sTexto;
         
         return sTexto;
-    }
+    }*/
     
     public String readLineWithScanner() {
         Scanner reader = new Scanner(System.in);
