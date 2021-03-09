@@ -17,16 +17,20 @@ import java.util.Scanner;
  * @author Marina
  */
 public class EditableBufferedReader extends BufferedReader {
-    
-    /**
-     * @param args the command line arguments
-     */
-    //public static void main(String[] args) {
-        // TODO code application logic here
-    //}
-    
-    public EditableBufferedReader(Reader reader) {
-        super(reader);
+
+    private static final int LEFT = 0;//http://manpages.ubuntu.com/manpages/bionic/es/man4/console_codes.4.html
+    private static final int RIGHT = 0;
+    private static final int HOME = 0;
+    private static final int END = 0;
+    private static final int INS = 0;
+    private static final int DEL = 0;
+    private static final int BKSP = 0;
+    private static final int ESC = 0;//??????????????????????????????????????????????
+    private Line line;
+
+    public EditableBufferedReader(Reader in) {
+        super(in);
+        line = new Line();
     }
     
     public void setRaw() throws IOException, InterruptedException {
@@ -47,17 +51,27 @@ public class EditableBufferedReader extends BufferedReader {
         }
     }
     
+       @Override
     public int read() throws IOException {
         DataInputStream in = new DataInputStream(System.in);
         int i = -1;
         try {
             i = in.readInt();
-        } catch(IOException ex) {
             
+            switch (i) {
+                case RIGHT:
+                    line.goRight();
+                    break;
+                    //...
+
+            }
+        } catch (IOException ex) {
+
         }
-        
-        return i; 
+
+        return i;
     }
+
     
     public int readWithScanner() {
         Scanner reader = new Scanner(System.in);
