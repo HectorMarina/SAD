@@ -17,19 +17,19 @@ import java.util.Scanner;
  * @author Marina
  */
 public class EditableBufferedReader extends BufferedReader {
-
-    private static final int LEFT = 0;//http://manpages.ubuntu.com/manpages/bionic/es/man4/console_codes.4.html
-    private static final int RIGHT = 0;
-    private static final int HOME = 0;
-    private static final int END = 0;
-    private static final int INS = 0;
-    private static final int DEL = 0;
-    private static final int BKSP = 0;
-    private static final int ESC = 0;//??????????????????????????????????????????????
+    
+    private static final int LEFT = 'D';
+    private static final int RIGHT = 'C';
+    private static final int HOME = '1';
+    private static final int END = '4';
+    private static final int INS = '2';
+    private static final int DEL = '3';
+    private static final int ESC = '\033';
+    private static final int CSI = '[';
     private Line line;
-
-    public EditableBufferedReader(Reader in) {
-        super(in);
+    
+    public EditableBufferedReader(Reader reader) {
+        super(reader);
         line = new Line();
     }
     
@@ -51,27 +51,41 @@ public class EditableBufferedReader extends BufferedReader {
         }
     }
     
-       @Override
     public int read() throws IOException {
         DataInputStream in = new DataInputStream(System.in);
         int i = -1;
         try {
-            i = in.readInt();
+            i = super.read(); //Reads a single character
             
-            switch (i) {
-                case RIGHT:
-                    line.goRight();
-                    break;
-                    //...
-
+            if(i != ESC) {
+                return i;
             }
-        } catch (IOException ex) {
-
+            
+            switch (i = super.read()) {
+                case CSI:
+                    switch(i = super.read()) {
+                        case LEFT:  line.goLeft();
+                                    break;
+                        case RIGHT: line.goRight();
+                                    break;
+                        case HOME:  line.goHome();
+                                    break;
+                        case END:   line.goEnd();
+                                    break;
+                        case INS:   line.insertChar();
+                                    break;
+                        case DEL:   line.deleteChar();
+                                    break;
+                        default:    return i;
+                    }
+                default: return i;
+            }
+        } catch(IOException ex) {
+            
         }
-
+        
         return i;
     }
-
     
     public int readWithScanner() {
         Scanner reader = new Scanner(System.in);
@@ -83,19 +97,13 @@ public class EditableBufferedReader extends BufferedReader {
         
         return integer;
     }
-    @Override
-    public String readLine() throws IOException {
+    
+    public String readLine () {
         this.setRaw();
         //bucle hasta intro/// utilizar el metodo read para editar
         this.unsetRaw();
         return line.getLine();
     }
-   /* public String readLine () {
-        BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
-        String sTexto;
-        
-        return sTexto;
-    }*/
     
     public String readLineWithScanner() {
         Scanner reader = new Scanner(System.in);
