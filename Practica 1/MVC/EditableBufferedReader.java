@@ -1,97 +1,155 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package practica1.MVC;
+package MVC;
 
+import Constants.Keyboard;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Scanner;
 
-/**
- *
- * @author Marina
- */
 public class EditableBufferedReader extends BufferedReader {
-    
-    private static final int LEFT = 'D';
-    private static final int RIGHT = 'C';
-    private static final int HOME = '1';
-    private static final int END = '4';
-    private static final int INS = '2';
-    private static final int DEL = '3';
-    private static final int ESC = '\033';
-    private static final int CSI = '[';
+
     private Line line;
-    
+    private Console console;
+
     public EditableBufferedReader(Reader reader) {
         super(reader);
-        line = new Line();
+        this.line = new Line();
+        this.console = new Console(this.line);
+        this.line.addObserver(this.console);
     }
-    
+
     public void setRaw() throws IOException, InterruptedException {
+        //pasar el terminal de modo cooked a modo raw
         try {
             String[] cmd = {"/bin/sh", "-c", "stty raw </dev/tty"};
             Runtime.getRuntime().exec(cmd).waitFor();
-        } catch(IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             System.out.println("Error al passar al mode Raw");
         }
     }
-    
-    public void unsetRaw() throws InterruptedException {
+
+    public void unsetRaw() throws IOException, InterruptedException {
+        //pasar el terminal de modo raw a modo cooked
         try {
             String[] cmd = {"/bin/sh", "-c", "stty raw </dev/tty"};
             Runtime.getRuntime().exec(cmd).waitFor();
-        } catch(IOException ex) {
+        } catch (IOException | InterruptedException ex) {
             System.out.println("Error al passar al mode Cooked");
         }
     }
-    
+
+    @Override
     public int read() throws IOException {
-        DataInputStream in = new DataInputStream(System.in);
         int i = -1;
         try {
-            i = super.read(); //Reads a single character
-            
-            if(i != ESC) {
-                return i;
+            //Lee el siguiente caracter o tecla
+            i = super.read();
+
+            //Detectar que es una secuencia de escape
+            if (i != Keyboard.ESC) {
+                i = super.read();
+
+                switch (i = super.read()) {
+                    //Detectar si el siguiente caracter es un corchete
+                    case Keyboard.CSI:
+                        //Detectar el caracter y devolver su entero
+                        switch (i = super.read()) {
+                            case 'D':
+                                return Keyboard.LEFT;
+
+                            case 'C':
+                                return Keyboard.RIGHT;
+
+                            case '1':
+                                return Keyboard.HOME;
+
+                            case '4':
+                                return Keyboard.END;
+
+                            case '2':
+                                return Keyboard.INS;
+
+                            case '3':
+                                return Keyboard.DEL;
+
+                            default:
+                                return i;
+                        }
+                    default:
+                        return i;
+                }
+            } else if (i == Keyboard.BKSP) {
+                return Keyboard.BKSP;
             }
-            
-            switch (i = super.read()) {
-                case CSI:
-                    switch(i = super.read()) {
-                        case LEFT:  line.goLeft();
-                                    break;
-                        case RIGHT: line.goRight();
-                                    break;
-                        case HOME:  line.goHome();
-                                    break;
-                        case END:   line.goEnd();
-                                    break;
-                        case INS:   line.insertChar();
-                                    break;
-                        case DEL:   line.deleteChar();
-                                    break;
-                        default:    return i;
-                    }
-                default: return i;
-            }
-        } catch(IOException ex) {
-            
+        } catch (IOException ex) {
+
         }
-        
-        return i;
+
+        return -1;
     }
-    
-    public String readLine () {
-        setRaw();
-        //bucle hasta intro/// utilizar el metodo read para editar
-        unsetRaw();
-        return line.getLine();
+
+    @Override
+    public String readLine() throws IOException {
+        //Pasamos a modo Raw la consola
+        //this.setRaw();
+        int i = -1;
+        try {
+            //Lee el siguiente caracter o tecla
+            i = super.read();
+
+            //Detectar que es una secuencia de escape
+            if (i != Keyboard.ESC) {
+                i = super.read();
+
+                switch (i = super.read()) {
+                    //Detectar si el siguiente caracter es un corchete
+                    case Keyboard.CSI:
+                        //Detectar el caracter y llamar al metodo correspondiente
+                        switch (i = super.read()) {
+                            case 'D':
+                                //Movemos el cursor a la izquierda
+                                this.line.goLeft();
+                                break;
+
+                            case 'C':
+                                //Movemos el cursor a la derecha
+                                this.line.goRight();
+                                break;
+
+                            case '1':
+                                //Movemos el cursor al inicio de la linea
+                                this.line.goHome();
+                                break;
+
+                            case '4':
+                                //Movemos el cursor al final de la linea
+                                this.line.goEnd();
+                                break;
+
+                            case '2':
+                                //Damos o quitamos permiso
+                                this.line.insert();
+                                break;
+
+                            case '3':
+                                this.line.deleteChar();
+                                break;
+                        }
+                }
+            } else if (i == Keyboard.BKSP) {
+                this.line.bkspChar();
+            }
+
+            //Pasamos a modo Cooked la consSola
+            //this.unsetRaw();
+            //Si tenemos permiso para sobreescribir lo haremos
+            //Si no tenemos permiso para sobreescribir no lo haremos
+            this.line.insertChar((char) i);
+
+        } catch (IOException ex) {
+
+        }
+
+        return this.line.toString();
     }
-    
+
 }
