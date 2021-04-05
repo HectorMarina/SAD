@@ -1,6 +1,7 @@
 package Basic;
 
 //import java.util.ArrayList;
+
 public class Line {
 
     //private ArrayList<Character> linea;
@@ -15,18 +16,24 @@ public class Line {
         this.permission = false;
     }
 
-    String getLine() {
+    public String getLine() {
         //Devuelve el contenido de la linea
         return this.line;
+        //return this.linea; en el caso de que hagamos un metodo ArrayList
 
     }
 
-    int getPos() {
+    public int getPos() {
         //Devuelve la posicion actual del cursor
         return this.pos;
     }
 
-    void insertChar(char character) {
+    public void insert() {
+        //Damos permiso para sobreescribir
+         this.permission = !this.permission;
+    }
+
+    public void insertChar(char character) {
         //Miramos si tenemos permiso para sobreescribir
         if (this.permission) {
             if (this.pos < this.line.length()) {
@@ -90,7 +97,7 @@ public class Line {
 
     }
 
-    void goLeft() {
+    public void goLeft() {
         //Mueve el cursor a la izquierda
         if (this.pos != 0) {
             //Si el cursor no se encuentra al principio de la linea lo mueve a la izquierda
@@ -98,22 +105,36 @@ public class Line {
         }
     }
 
-    void goRight() {
+    public void goRight() {
         //Mueve el cursor a la derecha
-        if (this.pos != this.line.length()) {
+        if (this.pos != this.line.length()) { // this.linea.size() si es ArrayList
             //Si el cursor no se encuentra al final de la linea lo mueve a la derecha
             this.pos++;
         }
     }
 
-    void goHome() {
+    public void goHome() {
         //Mueve el cursor al inicio de la linea
         this.pos = 0;
     }
 
-    void goEnd() {
+    public void goEnd() {
         //Mueve el cursor al final de la linea
         this.pos = this.line.length() - 1;
+        //this.pos = this.linea.size() -1;
+        
     }
 
+    @Override
+    public String toString(){
+        return this.line;
+        /*
+        String vector = "";
+        for(Character character: this.linea){
+            vector += character
+        }
+        return vector;
+        */
+        
+    }
 }
