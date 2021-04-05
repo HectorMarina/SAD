@@ -124,8 +124,8 @@ public class EditableBufferedReader extends BufferedReader {
                                 break;
 
                             case '2':
-                                //Insertamos un caracter
-                                this.line.insertChar((char) i);
+                                //Damos o quitamos permiso
+                                this.line.insert();
                                 break;
 
                             case '3':
@@ -136,17 +136,18 @@ public class EditableBufferedReader extends BufferedReader {
             } else if (i == Keyboard.BKSP) {
                 this.line.bkspChar();
             }
-            //Mientras no le demos a enter, seguira leyendo lo que escribimos
-            while (i != Keyboard.ENT) {
-                //Pasamos a modo Cooked la consola
-                //this.unsetRaw();
-                return line.toString();
-            }
+
+            //Pasamos a modo Cooked la consola
+            //this.unsetRaw();
+            //Si tenemos permiso para sobreescribir lo haremos
+            //Si no tenemos permiso para sobreescribir no lo haremos
+            this.line.insertChar((char) i);
+
         } catch (IOException ex) {
 
         }
 
-        return null;
+        return this.line.toString();
     }
 
 }
