@@ -31,7 +31,7 @@ public class MainFrame extends JFrame {
         //Se configura el diseño y se pone el diseño del borde
         this.setLayout(new BorderLayout());
         
-        //Se obtiene el panel del contenido con diseño null
+        //Se obtiene el panel del contenido con diseño null (usa coordenadas)
         this.getContentPane().setLayout(null);
         
         //Se asigna el tamaño del formulario
@@ -42,6 +42,12 @@ public class MainFrame extends JFrame {
         
         //Se agrega el tablero al formulario y se pone que ocupe todo el espacio
         this.add(mTablero, BorderLayout.CENTER);
+        
+        //Se asigna numero de filas del tablero
+        mTablero.setNumeroDeFilas(8);
+        
+        //Se asigna numero de columnas del tablero
+        mTablero.setNumeroDeColumnas(4);
         
         //Se inicializa el tablero
         mTablero.inicializar();
