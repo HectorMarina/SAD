@@ -1,0 +1,88 @@
+package main;
+
+import java.awt.Font;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class CelsiusConverter implements ActionListener {
+
+    JFrame converterFrame;
+    JPanel converterPanel;
+    JTextField tempCelsius;
+    JLabel celsiusLabel, fahrenheitLabel;
+    JButton convertTemp;
+
+    public CelsiusConverter() {
+        //Create and set up the window.
+        converterFrame = new JFrame("Celsius Converter");//Creamos la ventana y añadimos texto
+        converterFrame.setSize(210, 130);//Establecemos el tamaño y posicion de la ventana
+        converterFrame.setLocationRelativeTo(null);// Centramos la ventana a la pantalla
+
+        converterPanel = new JPanel();//Creamos el panel
+        converterPanel.setLayout(null);//Desactivamos el diseño
+
+        celsiusLabel = new JLabel("Celsius");//Creamos el label y añadimos el texto
+        celsiusLabel.setBounds(110, 8, 50, 40);//Establecemos el tamaño y posicion del label
+        celsiusLabel.setHorizontalAlignment(SwingConstants.CENTER);//Centramos el texto en el label
+        celsiusLabel.setFont(new Font("arial", Font.BOLD, 12));//Establecemos el tipo de fuente, negrita y tamaño
+
+        fahrenheitLabel = new JLabel("Fahrenheit");//Creamos el label y añadimos el texto
+        fahrenheitLabel.setBounds(100, 30, 80, 65);//Establecemos el tamaño y posicion del label
+        fahrenheitLabel.setHorizontalAlignment(SwingConstants.CENTER);//Centramos el texto en el label
+        fahrenheitLabel.setFont(new Font("arial", Font.BOLD, 12));//Establecemos el tipo de fuente, negrita y tamaño
+
+        tempCelsius = new JTextField();//Creamos el textField
+        tempCelsius.setBounds(5, 15, 100, 25);//Establecemos el tamaño y posicion del textField
+
+        //Set the default button.
+        convertTemp = new JButton("Convert");//Creamos el boton y añadimos texto
+        convertTemp.setBounds(10, 50, 80, 30);//Establecemos el tamaño y posicion del boton
+        convertTemp.addActionListener(this);//Añadimos la accion al boton
+
+        //Add the panel to the window.
+        converterFrame.add(converterPanel);//Añadimos el Lanel a la Ventana
+        converterPanel.add(celsiusLabel);//Añadimos el Label/textField/Boton al panel
+        converterPanel.add(fahrenheitLabel);
+        converterPanel.add(tempCelsius);
+        converterPanel.add(convertTemp);
+        
+        //Display the window.
+        converterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//Acaba el programa cuando se cierra la ventana
+        converterFrame.setVisible(true);//Hacer la ventana visible
+
+    }
+    
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        //Parse degrees Celsius as a double and convert to Fahrenheit.
+        if (event.getSource() == convertTemp){//Si el evento que ocurre está relacionado con el boton (click)
+        int tempF = (int) ((Double.parseDouble(tempCelsius.getText())) * 1.8 + 32);//Formula para pasar de Celsius a Fahrenheit
+        fahrenheitLabel.setText(tempF + " Fahrenheit");//Añadimos el resultado al label
+        }
+    }
+
+    private static void createAndShowGUI() {
+        //Set the look and feel.
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+        }
+
+        //Make sure we have nice window decorations.
+        JFrame.setDefaultLookAndFeelDecorated(true);
+
+        CelsiusConverter converter = new CelsiusConverter();
+    }
+
+    public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                createAndShowGUI();
+            }
+        });
+    }
+}
