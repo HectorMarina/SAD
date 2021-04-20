@@ -1,0 +1,10 @@
+package eventos;
+
+
+public class Principal {
+    public static void main(String[] args) {
+        eventos.Ventana v = new Ventana();
+        
+        v.setVisible(true);//Hacemos visible la ventana
+    }
+}
