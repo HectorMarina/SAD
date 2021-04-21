@@ -14,24 +14,24 @@ import javax.swing.SwingConstants;
 
 public class Tablero extends JFrame {
 
-    public JPanel panel = new JPanel();//Creacion de un panel
-    public JButton casilla11 = new JButton();//Creamos la casilla noroeste
-    public JButton casilla21 = new JButton();//Creamos la casilla oeste
-    public JButton casilla31 = new JButton();//Creamos la casilla suroeste
-    public JButton casilla22 = new JButton();//Creamos la casilla central
-    public JButton casilla12 = new JButton();//Creamos la casilla norte
-    public JButton casilla32 = new JButton();//Creamos la casilla sur
-    public JButton casilla13 = new JButton();//Creamos la casilla noreste
-    public JButton casilla23 = new JButton();//Creamos la casilla este
-    public JButton casilla33 = new JButton();//Creamos la casilla sureste
+    private JPanel panel = new JPanel();//Creacion de un panel
+    private JButton casilla11 = new JButton();//Creamos la casilla noroeste
+    private JButton casilla21 = new JButton();//Creamos la casilla oeste
+    private JButton casilla31 = new JButton();//Creamos la casilla suroeste
+    private JButton casilla22 = new JButton();//Creamos la casilla central
+    private JButton casilla12 = new JButton();//Creamos la casilla norte
+    private JButton casilla32 = new JButton();//Creamos la casilla sur
+    private JButton casilla13 = new JButton();//Creamos la casilla noreste
+    private JButton casilla23 = new JButton();//Creamos la casilla este
+    private JButton casilla33 = new JButton();//Creamos la casilla sureste
 
-    public ImageIcon casillaVacia = new ImageIcon("casillaVacia.png");//Creamos la imagen de casilla vacía
-    public ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
-    public ImageIcon casillaO = new ImageIcon("o.png");//Creamos la imagen de casilla O
+    private ImageIcon casillaVacia = new ImageIcon("casillaVacia.png");//Creamos la imagen de casilla vacía
+    private ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
+    private ImageIcon casillaO = new ImageIcon("o.png");//Creamos la imagen de casilla O
     
     public int turno = 0;
-    public static final int XCASILLA = 75;
-    public static final int YCASILLA = 75;
+    private static final int XCASILLA = 75;
+    private static final int YCASILLA = 75;
     
     
 
