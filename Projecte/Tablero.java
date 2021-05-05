@@ -1,25 +1,48 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package TicTacToe;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class Tablero extends JFrame implements ActionListener {
+/**
+ *
+ * @author Marina
+ */
 
-    private JPanel panel = new JPanel();//Creacion de un panel
+public class Tablero extends JFrame implements ActionListener, ChangeListener {
+
+   private JPanel panel = new JPanel();//Creacion de un panel
+   private JPanel menu = new JPanel();
     private int casillaOcupada[][] = {{0, 0, 0},
                                       {0, 0, 0},
                                       {0, 0, 0}};
 
     private JButton[][] casillas = new JButton[Constants.FILAS][Constants.COLUMNAS];//Creamos las casillas
+    private JButton restart = new JButton("Restart");
+    private JCheckBox sonido = new JCheckBox();
 
     private ImageIcon casillaVacia = new ImageIcon("casillaVacia.png");//Creamos la imagen de casilla vacía
     private ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
@@ -27,7 +50,7 @@ public class Tablero extends JFrame implements ActionListener {
     private int turno = 0;
 
     public Tablero() {
-        setSize(500, 500);//Establecemos el tamaño de la ventana
+        setSize(700, 500);//Establecemos el tamaño de la ventana
         setTitle("Tic Tac Toe");//Establecemos el titulo de la ventana
         setLocationRelativeTo(null);//Ponemos la ventana en el centro de la pantalla
         iniciarComponentes();
@@ -39,12 +62,21 @@ public class Tablero extends JFrame implements ActionListener {
         putPanel();
         putTablero();
         putCasillas();
+        putMenu();
     }
 
     private void putPanel() {
         panel.setLayout(null);//Desactivando el diseño
+        //panel.setBounds(250, 250, 500, 500);
+        panel.setSize(500, 500);
         panel.setBackground(Color.WHITE);//Ajustamos el color de fondo a blanco
         this.getContentPane().add(panel);//Agregamos el panel a la ventana
+        
+        menu.setLayout(null);
+        //menu.setBounds(500, 250, 200, 500);
+        menu.setSize(200, 500);
+        menu.setBackground(Color.WHITE);
+        this.getContentPane().add(menu, BorderLayout.CENTER);
     }
 
     private void putTablero() {
@@ -91,6 +123,9 @@ public class Tablero extends JFrame implements ActionListener {
                         x = Constants.X3;
                         break;
                 }
+                
+                
+                
                 casillas[i][j] = new JButton();//Creamos el boton
                 casillas[i][j].setBounds(x, y, Constants.SQUARE, Constants.SQUARE);//Dimensionamos y decidimos su posición
                 casillas[i][j].setBorderPainted(false);//Quitamos los bordes del boton
@@ -101,16 +136,67 @@ public class Tablero extends JFrame implements ActionListener {
             }
         }
     }
+    
+    private void putMenu() {
+        //JButton restart = new JButton("Restart");
+        restart.setBounds(500, 100, 100, 40);
+        restart.addActionListener(this);
+        menu.add(restart);
+        
+        sonido.setBounds(500, 200, 25, 25);
+        sonido.setSelected(true);
+        sonido.addChangeListener(this);
+        menu.add(sonido);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton casilla = (JButton) e.getSource();
-        if (turno % 2 == 0) {//Si es el turno de X
-            casilla.setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+        
+        if(e.getSource().equals(restart)) {
+            for(int i=0; i<Constants.FILAS; i++) {
+                for(int j=0; j<Constants.COLUMNAS; j++) {
+                    casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
+                }
+            }
+        } else {
+            JButton casilla = (JButton) e.getSource();
+            if (turno % 2 == 0) {//Si es el turno de X
+                casilla.setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
 
-        } else {//Si es el turno de O
-            casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+            } else {//Si es el turno de O
+                casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+            }
+            turno++;//Pasamos el turno
         }
-        turno++;//Pasamos el turno
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        
+        if(sonido.isSelected() == true) {
+            try {
+                // Se obtiene un Clip de sonido
+                Clip s = AudioSystem.getClip();
+
+                // Se carga con un fichero wav
+                s.open(AudioSystem.getAudioInputStream(new File("musica.wav")));
+
+                // Comienza la reproducción
+                s.start();
+                
+            }catch(IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+                System.out.println("" + ex);
+            }
+        }else {
+            try {
+                // Se obtiene un Clip de sonido
+                Clip s = AudioSystem.getClip();
+
+                // Se cierra el clip.
+                s.close();
+            }catch(LineUnavailableException ex) {
+                System.out.println("" + ex);
+            }
+        }
     }
 }
