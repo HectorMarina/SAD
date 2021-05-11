@@ -49,6 +49,7 @@ public class Tablero extends JFrame implements ActionListener, ChangeListener {
     private ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
     private ImageIcon casillaO = new ImageIcon("o.png");//Creamos la imagen de casilla O
     private int turno = 0;
+    private int ganador = 0;
 
     public Tablero() {
         setSize(700, 500);//Establecemos el tamaño de la ventana
@@ -152,21 +153,55 @@ public class Tablero extends JFrame implements ActionListener, ChangeListener {
     
     private void comprobarJugada() {
         
+        Image cX = casillaX.getImage().getScaledInstance(casillaX.getIconWidth(), casillaX.getIconHeight(), Image.SCALE_SMOOTH);
+        
         for(int i=0; i<Constants.FILAS; i++) {
-            if(casillas[i][i].getIcon().equals(casillaX) && casillas[i][(i+1)%3].getIcon().equals(casillaX) &&  casillas[i][(i+2)%3].getIcon().equals(casillaX)) {// || (casillas[i][j].getIcon() == casillas[(i+1)%3][j].getIcon() == casillas[(i+2)%3][j].getIcon()) || (casillas[i][j].getIcon() == casillas[(i+1)%3][(j+1)%3].getIcon() == casillas[(i+2)%3][(j+2)%3].getIcon()) || (casillas[i][(j+2)%3].getIcon() == casillas[(i+1)%3][(j+1)%3].getIcon() == casillas[(i+2)%3][j].getIcon())) {
-                ganadorJugada();
-                JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
+            if((casillas[i][i].getIcon().equals(cX) && casillas[i][(i+1)%3].getIcon().equals(cX) &&  casillas[i][(i+2)%3].getIcon().equals(cX))) {// || (casillas[i][i].getIcon().equals(cX) == casillas[i][(i+1)%3].getIcon().equals(cX) == casillas[i][(i+2)%3].getIcon().equals(cX)) || (casillas[i][i].getIcon().equals(cX) == casillas[(i+1)%3][(i+1)%3].getIcon().equals(cX) == casillas[(i+2)%3][(i+2)%3].getIcon().equals(cX)) || (casillas[i][(i+2)%3].getIcon().equals(cX) == casillas[(i+1)%3][(i+1)%3].getIcon().equals(cX) == casillas[(i+2)%3][i].getIcon().equals(cX))) {
+                int jugadorGanador = 'X';
+                ganadorJugada(jugadorGanador);
             }
         }
     }
     
-    private void ganadorJugada() {
+    private void ganadorJugada(int ganador) {
         
         for(int i=0; i<Constants.FILAS; i++) {
             for(int j=0; j<Constants.COLUMNAS; j++) {
                 casillas[i][j].setEnabled(false);
             }
         }
+        
+        switch(ganador) {
+            case 'X': JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
+                      break;
+            case 'O': JOptionPane.showMessageDialog(null, "Ha ganado el Jugador O");
+                      break;
+            default:  JOptionPane.showMessageDialog(null, "Empate");
+                      break;
+        }
+        if(ganador == 'X') {
+            JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
+        } else if(ganador == 'O') {
+            JOptionPane.showMessageDialog(null, "Ha ganado el Jugador O");
+        } else {
+            JOptionPane.showMessageDialog(null, "Empate");
+        }
+    }
+    
+    private void reproducirSonido() {
+        try {
+                // Se obtiene un Clip de sonido
+                Clip s = AudioSystem.getClip();
+
+                // Se carga con un fichero wav
+                s.open(AudioSystem.getAudioInputStream(new File("ficha.wav")));
+
+                // Comienza la reproducción
+                s.start();
+                
+            }catch(IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+                System.out.println("" + ex);
+            }
     }
 
     @Override
@@ -181,6 +216,9 @@ public class Tablero extends JFrame implements ActionListener, ChangeListener {
             }
         } else {
             JButton casilla = (JButton) e.getSource();
+            
+            //reproducirSonido();
+            
             if (turno % 2 == 0) {//Si es el turno de X
                 casilla.setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
                 casilla.setEnabled(false);
@@ -190,8 +228,10 @@ public class Tablero extends JFrame implements ActionListener, ChangeListener {
                 casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
                 casilla.setEnabled(false);
                 comprobarJugada();
+                
             }
             turno++;//Pasamos el turno
+            reproducirSonido();
         }
     }
 
