@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
@@ -148,6 +149,25 @@ public class Tablero extends JFrame implements ActionListener, ChangeListener {
         sonido.addChangeListener(this);
         menu.add(sonido);
     }
+    
+    private void comprobarJugada() {
+        
+        for(int i=0; i<Constants.FILAS; i++) {
+            if(casillas[i][i].getIcon().equals(casillaX) && casillas[i][(i+1)%3].getIcon().equals(casillaX) &&  casillas[i][(i+2)%3].getIcon().equals(casillaX)) {// || (casillas[i][j].getIcon() == casillas[(i+1)%3][j].getIcon() == casillas[(i+2)%3][j].getIcon()) || (casillas[i][j].getIcon() == casillas[(i+1)%3][(j+1)%3].getIcon() == casillas[(i+2)%3][(j+2)%3].getIcon()) || (casillas[i][(j+2)%3].getIcon() == casillas[(i+1)%3][(j+1)%3].getIcon() == casillas[(i+2)%3][j].getIcon())) {
+                ganadorJugada();
+                JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
+            }
+        }
+    }
+    
+    private void ganadorJugada() {
+        
+        for(int i=0; i<Constants.FILAS; i++) {
+            for(int j=0; j<Constants.COLUMNAS; j++) {
+                casillas[i][j].setEnabled(false);
+            }
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -156,15 +176,20 @@ public class Tablero extends JFrame implements ActionListener, ChangeListener {
             for(int i=0; i<Constants.FILAS; i++) {
                 for(int j=0; j<Constants.COLUMNAS; j++) {
                     casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
+                    casillas[i][j].setEnabled(true);
                 }
             }
         } else {
             JButton casilla = (JButton) e.getSource();
             if (turno % 2 == 0) {//Si es el turno de X
                 casilla.setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+                casilla.setEnabled(false);
+                comprobarJugada();
 
             } else {//Si es el turno de O
                 casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+                casilla.setEnabled(false);
+                comprobarJugada();
             }
             turno++;//Pasamos el turno
         }
