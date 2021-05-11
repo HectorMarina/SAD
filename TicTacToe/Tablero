@@ -14,6 +14,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -27,6 +28,12 @@ public class Tablero extends JPanel implements ActionListener {
     private int turno = 0;
     JLabel jugador1 = new JLabel();
     JLabel jugador2 = new JLabel();
+    JButton restart = new JButton("Restart");
+    JButton menu = new JButton("Menu");
+    JButton sonido = new JButton("Sound on");
+    JButton exit = new JButton("Exit");
+    JButton opciones = new JButton("Options");
+    private boolean sound = true;
 
     public Tablero() {
         iniciarComponentes();
@@ -37,6 +44,7 @@ public class Tablero extends JPanel implements ActionListener {
         putPanel();
         putTablero();
         putCasillas();
+        menuOpciones();
     }
 
     private void putPanel() {
@@ -62,9 +70,9 @@ public class Tablero extends JPanel implements ActionListener {
         this.add(tablero);
 
         //Etiqueta tipo texto
-        jugador1.setBounds(420, 160, 200, 20);
+        jugador1.setBounds(80, 400, 200, 25);
         jugador1.setFont(new Font("arial", Font.BOLD, 20));
-        jugador2.setBounds(420, 230, 200, 20);
+        jugador2.setBounds(250, 400, 200, 25);
         jugador2.setFont(new Font("arial", Font.BOLD, 20));
         this.add(jugador1);
         this.add(jugador2);
@@ -110,31 +118,86 @@ public class Tablero extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton casilla = (JButton) e.getSource();
+        if (e.getSource().equals(restart)) {
+            for (int i = 0; i < Constants.FILAS; i++) {
+                for (int j = 0; j < Constants.COLUMNAS; j++) {
+                    casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
+                    casillas[i][j].setEnabled(true);
+                }
+            }
+            turno = 0;
+        } else if (e.getSource().equals(exit)) {
+            System.exit(0);
+        } else if (e.getSource().equals(sonido)) {
+            sound = !sound;
+            if (!sound) {
+                sonido.setText("Sonido off");
+            } else {
+                sonido.setText("Sonido on");
+            }
+        } else if (e.getSource().equals(opciones)) {
+            JOptionPane.showMessageDialog(null, " Press alt + m(Menu) / r(Restart) / s(Sound on/off) / e(Exit)", "Options", 1);
+        } else {
+            JButton casilla = (JButton) e.getSource();
 
-        if (turno % 2 == 0) {//Si es el turno de X
-            casilla.setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+            if (turno % 2 == 0) {//Si es el turno de X
+                casilla.setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
 
-        } else {//Si es el turno de O
-            casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+            } else {//Si es el turno de O
+                casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+            }
+            turno++;//Pasamos el turno
+            if (sound) {
+                reproducirSonido();
+            }
         }
-        turno++;//Pasamos el turno
-        reproducirSonido();
     }
-    
+
     private void reproducirSonido() {
         try {
-                // Se obtiene un Clip de sonido
-                Clip s = AudioSystem.getClip();
+            // Se obtiene un Clip de sonido
+            Clip s = AudioSystem.getClip();
 
-                // Se carga con un fichero wav
-                s.open(AudioSystem.getAudioInputStream(new File("ficha.wav")));
+            // Se carga con un fichero wav
+            s.open(AudioSystem.getAudioInputStream(new File("ficha.wav")));
 
-                // Comienza la reproducción
-                s.start();
-                
-            }catch(IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
-                System.out.println("" + ex);
-            }
+            // Comienza la reproducción
+            s.start();
+
+        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+            System.out.println("" + ex);
+        }
     }
+
+    private void menuOpciones() {
+        menu.setBounds(450, 120, 100, 20);//Dimensionamos los botones y los posicionamos
+        restart.setBounds(450, 170, 100, 20);
+        sonido.setBounds(450, 220, 100, 20);
+        exit.setBounds(450, 270, 100, 20);
+        opciones.setBounds(450, 320, 100, 20);
+        menu.setBackground(Color.WHITE);
+        restart.setBackground(Color.WHITE);
+        sonido.setBackground(Color.WHITE);
+        exit.setBackground(Color.WHITE);
+        opciones.setBackground(Color.WHITE);
+        menu.setFont(new Font("arial", Font.BOLD, 12));
+        restart.setFont(new Font("arial", Font.BOLD, 12));
+        sonido.setFont(new Font("arial", Font.BOLD, 12));
+        exit.setFont(new Font("arial", Font.BOLD, 12));
+        opciones.setFont(new Font("arial", Font.BOLD, 12));
+        menu.addActionListener(this);
+        restart.addActionListener(this);
+        sonido.addActionListener(this);
+        exit.addActionListener(this);
+        opciones.addActionListener(this);
+        menu.setMnemonic('m');
+        restart.setMnemonic('r');
+        sonido.setMnemonic('s');
+        exit.setMnemonic('e');
+        this.add(menu);//Añadimos los botones al panel
+        this.add(restart);
+        this.add(sonido);
+        this.add(exit);
+        this.add(opciones);
     }
+}
