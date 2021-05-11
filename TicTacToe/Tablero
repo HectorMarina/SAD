@@ -5,8 +5,12 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,7 +27,6 @@ public class Tablero extends JPanel implements ActionListener {
     private int turno = 0;
     JLabel jugador1 = new JLabel();
     JLabel jugador2 = new JLabel();
-    
 
     public Tablero() {
         iniciarComponentes();
@@ -34,7 +37,6 @@ public class Tablero extends JPanel implements ActionListener {
         putPanel();
         putTablero();
         putCasillas();
-        oyenteDeTeclado();
     }
 
     private void putPanel() {
@@ -58,12 +60,12 @@ public class Tablero extends JPanel implements ActionListener {
 
         this.add(titulo);//Añadimos las etiquetas al panel
         this.add(tablero);
-        
+
         //Etiqueta tipo texto
         jugador1.setBounds(420, 160, 200, 20);
-        jugador1.setFont(new Font("arial",Font.BOLD,20));
+        jugador1.setFont(new Font("arial", Font.BOLD, 20));
         jugador2.setBounds(420, 230, 200, 20);
-        jugador2.setFont(new Font("arial",Font.BOLD,20));
+        jugador2.setFont(new Font("arial", Font.BOLD, 20));
         this.add(jugador1);
         this.add(jugador2);
     }
@@ -117,24 +119,22 @@ public class Tablero extends JPanel implements ActionListener {
             casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
         }
         turno++;//Pasamos el turno
-
+        reproducirSonido();
     }
+    
+    private void reproducirSonido() {
+        try {
+                // Se obtiene un Clip de sonido
+                Clip s = AudioSystem.getClip();
 
-    private void oyenteDeTeclado() {
-        addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-                    System.out.println("hello");
-                }
-            }
-        });
+                // Se carga con un fichero wav
+                s.open(AudioSystem.getAudioInputStream(new File("ficha.wav")));
 
+                // Comienza la reproducción
+                s.start();
+                
+            }catch(IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+                System.out.println("" + ex);
+            }
     }
-}
+    }
