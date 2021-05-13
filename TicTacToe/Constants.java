@@ -11,4 +11,6 @@ public class Constants {
     public static final int Y1 = 97;
     public static final int Y2 = 195;
     public static final int Y3 = 290;
+    public static final Font LETRAMENUOPCIONES = new Font("arial", Font.BOLD, 12);
+    public static final Font LETRANOMBRES = new Font("arial", Font.BOLD, 20);
 }
