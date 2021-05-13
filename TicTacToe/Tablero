@@ -22,18 +22,22 @@ public class Tablero extends JPanel implements ActionListener {
 
     private final JButton[][] casillas = new JButton[Constants.FILAS][Constants.COLUMNAS];//Creamos las casillas
 
-    private final ImageIcon casillaVacia = new ImageIcon("casillaVacia.png");//Creamos la imagen de casilla vacía
-    private final ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
-    private final ImageIcon casillaO = new ImageIcon("o.png");//Creamos la imagen de casilla O
+    ImageIcon casillaVacia = new ImageIcon("casillaVacia.png");//Creamos la imagen de casilla vacía
+    ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
+    ImageIcon casillaO = new ImageIcon("o.png");//Creamos la imagen de casilla O
     private int turno = 0;
-    JLabel jugador1 = new JLabel();
-    JLabel jugador2 = new JLabel();
+    JLabel jugadorX = new JLabel();
+    JLabel jugadorO = new JLabel();
     JButton restart = new JButton("Restart");
     JButton menu = new JButton("Menu");
     JButton sonido = new JButton("Sound on");
     JButton exit = new JButton("Exit");
     JButton opciones = new JButton("Options");
     private boolean sound = true;
+    public int marcadorX = 0;
+    public int marcadorO = 0;
+    public String nombre1 = "";
+    public String nombre2 = "";
 
     public Tablero() {
         iniciarComponentes();
@@ -70,12 +74,12 @@ public class Tablero extends JPanel implements ActionListener {
         this.add(tablero);
 
         //Etiqueta tipo texto
-        jugador1.setBounds(80, 400, 200, 25);
-        jugador1.setFont(new Font("arial", Font.BOLD, 20));
-        jugador2.setBounds(250, 400, 200, 25);
-        jugador2.setFont(new Font("arial", Font.BOLD, 20));
-        this.add(jugador1);
-        this.add(jugador2);
+        jugadorX.setBounds(80, 400, 200, 25);//Posicionamos y dimensionamos los nombres de los jugadores
+        jugadorX.setFont(Constants.LETRANOMBRES);//Cambiamos la fuente
+        jugadorO.setBounds(250, 400, 200, 25);
+        jugadorO.setFont(Constants.LETRANOMBRES);
+        this.add(jugadorX);//Añadimos los nombres al panel
+        this.add(jugadorO);
     }
 
     private void putCasillas() {
@@ -118,36 +122,42 @@ public class Tablero extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(restart)) {
+
+        if (e.getSource().equals(menu)) {//Si el boton es menu no hacemos nada
+
+        } else if (e.getSource().equals(restart)) {//Si el boton es restart
             for (int i = 0; i < Constants.FILAS; i++) {
-                for (int j = 0; j < Constants.COLUMNAS; j++) {
+                for (int j = 0; j < Constants.COLUMNAS; j++) {//Ponemos todas las casillas vacias otra vez
                     casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
-                    casillas[i][j].setEnabled(true);
                 }
             }
+            marcadorX = 0;//Restablecemos los marcadores y el turno
+            marcadorO = 0;
             turno = 0;
-        } else if (e.getSource().equals(exit)) {
-            System.exit(0);
-        } else if (e.getSource().equals(sonido)) {
-            sound = !sound;
+        } else if (e.getSource().equals(exit)) {//Si el boton es exit
+            System.exit(0);//Salimos y paramos el programa
+        } else if (e.getSource().equals(sonido)) {//Si el boton es sonido
+            sound = !sound;//Cambiamos la variable sonido
             if (!sound) {
-                sonido.setText("Sonido off");
+                sonido.setText("Sonido off");//Cambiamos el label dependiendo de sonido
             } else {
-                sonido.setText("Sonido on");
+                sonido.setText("Sonido on");//Cambiamos el label dependiendo de sonido
             }
-        } else if (e.getSource().equals(opciones)) {
-            JOptionPane.showMessageDialog(null, " Press alt + m(Menu) / r(Restart) / s(Sound on/off) / e(Exit)", "Options", 1);
+        } else if (e.getSource().equals(opciones)) {//Si el boton es opciones
+            JOptionPane.showMessageDialog(null, " Press alt + m(Menu) / r(Restart) / s(Sound on/off) / e(Exit)", "Options", 1);//Mostaramos la ventana emergente con los comandos
         } else {
             JButton casilla = (JButton) e.getSource();
-
             if (turno % 2 == 0) {//Si es el turno de X
+                
                 casilla.setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
-
             } else {//Si es el turno de O
                 casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
             }
             turno++;//Pasamos el turno
-            if (sound) {
+
+            
+
+            if (sound) {//Comprobamos la variable sonido y reproducimos el sonido o no
                 reproducirSonido();
             }
         }
@@ -175,22 +185,21 @@ public class Tablero extends JPanel implements ActionListener {
         sonido.setBounds(450, 220, 100, 20);
         exit.setBounds(450, 270, 100, 20);
         opciones.setBounds(450, 320, 100, 20);
-        menu.setBackground(Color.WHITE);
+        menu.setBackground(Color.WHITE);//
         restart.setBackground(Color.WHITE);
         sonido.setBackground(Color.WHITE);
         exit.setBackground(Color.WHITE);
         opciones.setBackground(Color.WHITE);
-        menu.setFont(new Font("arial", Font.BOLD, 12));
-        restart.setFont(new Font("arial", Font.BOLD, 12));
-        sonido.setFont(new Font("arial", Font.BOLD, 12));
-        exit.setFont(new Font("arial", Font.BOLD, 12));
-        opciones.setFont(new Font("arial", Font.BOLD, 12));
-        menu.addActionListener(this);
-        restart.addActionListener(this);
+        menu.setFont(Constants.LETRAMENUOPCIONES);
+        restart.setFont(Constants.LETRAMENUOPCIONES);
+        sonido.setFont(Constants.LETRAMENUOPCIONES);
+        exit.setFont(Constants.LETRAMENUOPCIONES);
+        opciones.setFont(Constants.LETRAMENUOPCIONES);
+        restart.addActionListener(this);//Añadimos los actionListener a los botones
         sonido.addActionListener(this);
         exit.addActionListener(this);
         opciones.addActionListener(this);
-        menu.setMnemonic('m');
+        menu.setMnemonic('m');//Añadimos los atajos de teclado a los botones
         restart.setMnemonic('r');
         sonido.setMnemonic('s');
         exit.setMnemonic('e');
