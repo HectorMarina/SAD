@@ -11,7 +11,6 @@ import javax.swing.SwingConstants;
 public class Menu extends JLabel{
 
     JPanel panel = new JPanel();
-    Tablero tab = new Tablero();
     JLabel titulo = new JLabel("Tic Tac Toe");//Creamos el label
     JButton start2 = new JButton("Modo 2 jugadores");
     JButton start1 = new JButton("Modo 1 jugador");
