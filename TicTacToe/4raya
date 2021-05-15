@@ -1,0 +1,190 @@
+package main;
+
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
+public class Tablero extends JFrame implements ActionListener {
+
+    private final JButton[][] casillas = new JButton[7][6];//Creamos las casillas
+
+    private final ImageIcon casillaVacia = new ImageIcon("casillaVacia.png");//Creamos la imagen de casilla vacía
+    private final ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
+    private final ImageIcon casillaO = new ImageIcon("o.png");//Creamos la imagen de casilla O
+    private int turno = 1;
+    private int casillasOcupada[][] = {{0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0}};
+
+    public Tablero() {
+        setSize(700, 500);//Establecemos el tamaño de la ventana
+        setTitle("Tic Tac Toe");//Establecemos el titulo de la ventana
+        setBackground(Color.WHITE);//Establecemos el fondo de la ventana
+        setLocationRelativeTo(null);//Ponemos la ventana en el centro de la pantalla
+        iniciarComponentess();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);//Hacer que acabe el porgrama cuando cerramos la ventana
+    }
+
+    private void iniciarComponentess() {
+        putPanel();
+        putTablero();
+        putCasillas();
+    }
+
+    private void putPanel() {
+        this.setLayout(null);//Desactivando el diseño
+        this.setBackground(Color.WHITE);//Ajustamos el color de fondo a blanco    }
+    }
+
+    private void putTablero() {
+        //Etiqueta tipo Texto
+        /*JLabel titulo = new JLabel("Tic Tac Toe");//Creamos el label
+        titulo.setFont(new Font("arial", Font.BOLD, 30));//Establecemos tipo de fuente y  tamaño
+        titulo.setBounds(110, 10, 300, 80);//Establecemos el tamaño y posicion de la etiqueta
+        titulo.setHorizontalAlignment(SwingConstants.CENTER);//Establecemos la alineacion horizontal del texto (Se puede poner en el constructor)
+        */
+        //Etiqueta tipo imagen
+        /*ImageIcon imagen = new ImageIcon("tablero4raya.png");//Creamos una imagen
+        JLabel tablero = new JLabel(); //Creamos el label
+        tablero.setBounds(70, 40, 400, 400);//Ponemos el tamaño y posición del label
+        tablero.setIcon(new ImageIcon(imagen.getImage().getScaledInstance(tablero.getWidth(), tablero.getHeight(), Image.SCALE_SMOOTH)));//Estabelecemos medidaas de la imagen y la adaptacmos al label
+
+        //this.add(titulo);//Añadimos las etiquetas al panel
+        this.add(tablero);*/
+    }
+
+    private void putCasillas() {
+        int y = 0;
+        int x = 0;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {
+                switch (j) {
+                    case 0:
+                        y = Constants.Y1;
+                        break;
+                    case 1:
+                        y = Constants.Y2;
+                        break;
+                    case 2:
+                        y = Constants.Y3;
+                        break;
+                    case 3:
+                        y = Constants.Y4;
+                        break;
+                    case 4:
+                        y = Constants.Y5;
+                        break;
+                    case 5:
+                        y = Constants.Y6;
+                        break;
+
+                }
+                switch (i) {
+                    case 0:
+                        x = Constants.X1;
+                        break;
+                    case 1:
+                        x = Constants.X2;
+                        break;
+                    case 2:
+                        x = Constants.X3;
+                        break;
+                    case 3:
+                        x = Constants.X4;
+                        break;
+                    case 4:
+                        x = Constants.X5;
+                        break;
+                    case 5:
+                        x = Constants.X6;
+                        break;
+                    case 6:
+                        x = Constants.X7;
+                        break;
+                }
+                casillas[i][j] = new JButton();//Creamos el boton
+                casillas[i][j].setBounds(x, y, Constants.SQUARE, Constants.SQUARE);//Dimensionamos y decidimos su posición
+                //casillas[i][j].setBorderPainted(false);//Quitamos los bordes del boton
+                //casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
+                casillas[i][j].addActionListener(this);//Añadimos el ActionListener a las casillas
+                this.add(casillas[i][j]);//Añadimos el boton al panel    
+            }
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton casilla = (JButton) e.getSource();
+        int x = obtenerPos(casilla.getX());
+        int y= obtenerUltimaFila(casilla.getY());
+        System.out.println(x + "    " + y);
+        if (turno % 2 != 0) {//Si es el turno de X
+
+            casillas[x][y].setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+            turno++;//Pasamos el turno
+        } else if (turno % 2 == 0) {//Si es el turno de O
+
+            casillas[x][y].setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+            turno++;//Pasamos el turno
+        }
+
+    }
+
+    private int obtenerUltimaFila(int pos) {
+
+        int i = obtenerPos(pos);
+        for (int j = 5; j > 0; j++) {
+            if (casillasOcupada[i][j] == 0) {
+                ocuparCasilla(i, j);
+                return j;
+            }
+        }
+        return 0;
+    }
+
+    private int obtenerPos(int pos) {
+        int i = 0;
+        switch (pos) {
+            case Constants.X1:
+                i = 0;
+                break;
+            case Constants.X2:
+                i = 1;
+                break;
+            case Constants.X3:
+                i = 2;
+                break;
+            case Constants.X4:
+                i = 3;
+                break;
+            case Constants.X5:
+                i = 4;
+                break;
+            case Constants.X6:
+                i = 5;
+                break;
+            case Constants.X7:
+                i = 6;
+                break;
+        }
+        return i;
+    }
+    
+    private void ocuparCasilla(int i, int j){
+        if(turno % 2 != 0){
+        casillasOcupada[i][j] = 1;
+        }else{
+        casillasOcupada[i][j] = 2;
+        }
+    }
+}
