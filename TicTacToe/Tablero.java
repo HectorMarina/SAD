@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package TicTacToe;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -18,29 +12,23 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
  *
  * @author Marina
  */
-
-public class Tablero extends JPanel implements ActionListener{
+public class Tablero extends JPanel implements ActionListener {
 
     private final JButton[][] casillas = new JButton[Constants.FILAS][Constants.COLUMNAS];//Creamos las casillas
     private int casillaOcupada[][] = {{0, 0, 0},
-                                      {0, 0, 0},
-                                      {0, 0, 0}};
+    {0, 0, 0},
+    {0, 0, 0}};
     ImageIcon casillaVacia = new ImageIcon("casillaVacia.png");//Creamos la imagen de casilla vacía
     ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
     ImageIcon casillaO = new ImageIcon("o.png");//Creamos la imagen de casilla O
@@ -59,6 +47,7 @@ public class Tablero extends JPanel implements ActionListener{
     private int contadorCasillas = 0;
     public String nombre1 = "";
     public String nombre2 = "";
+    public int partida;
 
     public Tablero() {
         iniciarComponentes();
@@ -140,16 +129,16 @@ public class Tablero extends JPanel implements ActionListener{
             }
         }
     }
-    
+
     private void comprobarPosicion(Rectangle posicionBoton, String nombreCasilla) {
-        
+
         int i = 0;
         int j = 0;
-        
-        switch(posicionBoton.x) {
+
+        switch (posicionBoton.x) {
             case Constants.X1:
                 i = 0;
-                switch(posicionBoton.y) {
+                switch (posicionBoton.y) {
                     case Constants.Y1:
                         j = 0;
                         break;
@@ -163,7 +152,7 @@ public class Tablero extends JPanel implements ActionListener{
                 break;
             case Constants.X2:
                 i = 1;
-                switch(posicionBoton.y) {
+                switch (posicionBoton.y) {
                     case Constants.Y1:
                         j = 0;
                         break;
@@ -177,7 +166,7 @@ public class Tablero extends JPanel implements ActionListener{
                 break;
             case Constants.X3:
                 i = 2;
-                switch(posicionBoton.y) {
+                switch (posicionBoton.y) {
                     case Constants.Y1:
                         j = 0;
                         break;
@@ -190,80 +179,81 @@ public class Tablero extends JPanel implements ActionListener{
                 }
                 break;
         }
-        
-        if(nombreCasilla.equals(nombre1)) {
+
+        if (nombreCasilla.equals(nombre1)) {
             casillaOcupada[i][j] = Constants.JUGADORX;
-        } else if(nombreCasilla.equals(nombre2)) {
+        } else if (nombreCasilla.equals(nombre2)) {
             casillaOcupada[i][j] = Constants.JUGADORO;
         }
-        
+
     }
-    
+
     private boolean comprobarEmpate() {
-        
-        if(contadorCasillas == 9-1) {
+
+        if (contadorCasillas == 9 - 1) {
             empate = true;
         } else {
             empate = false;
         }
-        
+
         return empate;
     }
-    
+
     private int comprobarJugada(int jugador) {
-        
-        if(((casillaOcupada[0][0] == jugador) && (casillaOcupada[0][1] == jugador) && (casillaOcupada[0][2] == jugador)) ||
-                ((casillaOcupada[1][0] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[1][2] == jugador)) ||
-                ((casillaOcupada[2][0] == jugador) && (casillaOcupada[2][1] == jugador) && (casillaOcupada[2][2] == jugador)) ||
-                ((casillaOcupada[0][0] == jugador) && (casillaOcupada[1][0] == jugador) && (casillaOcupada[2][0] == jugador)) ||
-                ((casillaOcupada[0][1] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][1] == jugador)) ||
-                ((casillaOcupada[0][2] == jugador) && (casillaOcupada[1][2] == jugador) && (casillaOcupada[2][2] == jugador)) ||
-                ((casillaOcupada[0][0] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][2] == jugador)) ||
-                ((casillaOcupada[0][2] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][0] == jugador))) {
-            
+
+        if (((casillaOcupada[0][0] == jugador) && (casillaOcupada[0][1] == jugador) && (casillaOcupada[0][2] == jugador))
+                || ((casillaOcupada[1][0] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[1][2] == jugador))
+                || ((casillaOcupada[2][0] == jugador) && (casillaOcupada[2][1] == jugador) && (casillaOcupada[2][2] == jugador))
+                || ((casillaOcupada[0][0] == jugador) && (casillaOcupada[1][0] == jugador) && (casillaOcupada[2][0] == jugador))
+                || ((casillaOcupada[0][1] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][1] == jugador))
+                || ((casillaOcupada[0][2] == jugador) && (casillaOcupada[1][2] == jugador) && (casillaOcupada[2][2] == jugador))
+                || ((casillaOcupada[0][0] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][2] == jugador))
+                || ((casillaOcupada[0][2] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][0] == jugador))) {
+
             return jugador;
         } else {
-            if(comprobarEmpate()) {
+            if (comprobarEmpate()) {
                 return Constants.EMPATE;
             } else {
                 return Constants.SEGUIRJUGANDO;
             }
         }
     }
-    
+
     private void ganadorJugada(int ganador) {
-        
-        if(ganador != Constants.SEGUIRJUGANDO) {
-            for(int i=0; i<Constants.FILAS; i++) {
-                for(int j=0; j<Constants.COLUMNAS; j++) {
+
+        if (ganador != Constants.SEGUIRJUGANDO) {
+            for (int i = 0; i < Constants.FILAS; i++) {
+                for (int j = 0; j < Constants.COLUMNAS; j++) {
                     casillas[i][j].setEnabled(false);
                 }
             }
 
-            switch(ganador) {
-                case Constants.JUGADORX: JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
-                          break;
-                case Constants.JUGADORO: JOptionPane.showMessageDialog(null, "Ha ganado el Jugador O");
-                          break;
-                default:  JOptionPane.showMessageDialog(null, "Empate");
-                          break;
+            switch (ganador) {
+                case Constants.JUGADORX:
+                    JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
+                    marcadorX++;
+                    jugadorX.setText(nombre1 + "(X): " + marcadorX);
+                    
+                    break;
+                case Constants.JUGADORO:
+                    JOptionPane.showMessageDialog(null, "Ha ganado el Jugador O");
+                    marcadorO++;
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Empate");
+                    break;
             }
+            restart();
+            
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource().equals(menu)) {//Si el boton es menu no hacemos nada
-
-        } else if (e.getSource().equals(restart)) {//Si el boton es restart
-            for (int i = 0; i < Constants.FILAS; i++) {
-                for (int j = 0; j < Constants.COLUMNAS; j++) {//Ponemos todas las casillas vacias otra vez
-                    casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
-                    casillas[i][j].setEnabled(true);
-                    casillaOcupada[i][j] = Constants.CASILLAVACIA;
-                }
-            }
+        if (e.getSource().equals(restart)) {//Si el boton es restart
+            restart();
             marcadorX = 0;//Restablecemos los marcadores y el turno
             marcadorO = 0;
             turno = 0;
@@ -300,11 +290,10 @@ public class Tablero extends JPanel implements ActionListener{
             }
             turno++;//Pasamos el turno
 
-            
-
             if (sound) {//Comprobamos la variable sonido y reproducimos el sonido o no
                 reproducirSonido();
             }
+            comprobarGanador();
         }
     }
 
@@ -353,5 +342,27 @@ public class Tablero extends JPanel implements ActionListener{
         this.add(sonido);
         this.add(exit);
         this.add(opciones);
+    }
+
+    private void restart() {
+        for (int i = 0; i < Constants.FILAS; i++) {
+            for (int j = 0; j < Constants.COLUMNAS; j++) {//Ponemos todas las casillas vacias otra vez
+                casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
+                casillas[i][j].setEnabled(true);
+                casillaOcupada[i][j] = Constants.CASILLAVACIA;
+            }
+        }
+        jugadorX.setText(nombre1 + "(X): " + marcadorX);
+        jugadorO.setText(nombre2 + "(O): " + marcadorO);
+    }
+    private void comprobarGanador(){
+        if(marcadorX == partida){
+            JOptionPane.showMessageDialog(null, "El ganador es: " + nombre1 + "(X)");
+            restart();
+        }
+        if(marcadorO == partida){
+            JOptionPane.showMessageDialog(null, "El ganador es: " + nombre2 + "(O)");
+            restart();
+        }
     }
 }
