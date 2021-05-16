@@ -59,5 +59,12 @@ public class Ventana extends JFrame {
             tablero.marcadorO = 0;
             validate();
         });
+        tablero4.menu.addActionListener((ActionEvent e) -> {
+            tablero4.setVisible(false);
+            menu.setVisible(true);
+            tablero4.marcadorRojo = 0;
+            tablero4.marcadorAmarillo = 0;
+            validate();
+        });
     }
 }
