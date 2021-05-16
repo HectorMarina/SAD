@@ -50,6 +50,7 @@ public class Tablero4 extends JPanel implements ActionListener {
 
     public Tablero4() {
           iniciarComponentes();
+          this.setBackground(Color.WHITE);
 
     }
 
