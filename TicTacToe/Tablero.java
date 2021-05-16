@@ -52,9 +52,8 @@ public class Tablero extends JPanel implements ActionListener {
 
     public Tablero() {
         iniciarComponentes();
-
     }
-
+    
     private void iniciarComponentes() {
         putPanel();
         putTablero();
@@ -65,7 +64,6 @@ public class Tablero extends JPanel implements ActionListener {
     private void putPanel() {
         this.setLayout(null);//Desactivando el diseño
         this.setBackground(Color.WHITE);//Ajustamos el color de fondo a blanco
-
     }
 
     private void putTablero() {
@@ -100,24 +98,24 @@ public class Tablero extends JPanel implements ActionListener {
             for (int j = 0; j < Constants.COLUMNAS; j++) {
                 switch (i) {
                     case 0:
-                        y = Constants.Y1;
+                        y = Constants.Y11;
                         break;
                     case 1:
-                        y = Constants.Y2;
+                        y = Constants.Y22;
                         break;
                     case 2:
-                        y = Constants.Y3;
+                        y = Constants.Y33;
                         break;
                 }
                 switch (j) {
                     case 0:
-                        x = Constants.X1;
+                        x = Constants.X11;
                         break;
                     case 1:
-                        x = Constants.X2;
+                        x = Constants.X22;
                         break;
                     case 2:
-                        x = Constants.X3;
+                        x = Constants.X33;
                         break;
                 }
                 casillas[i][j] = new JButton();//Creamos el boton
@@ -137,44 +135,44 @@ public class Tablero extends JPanel implements ActionListener {
         int j = 0;
 
         switch (posicionBoton.x) {
-            case Constants.X1:
+            case Constants.X11:
                 i = 0;
                 switch (posicionBoton.y) {
-                    case Constants.Y1:
+                    case Constants.Y11:
                         j = 0;
                         break;
-                    case Constants.Y2:
+                    case Constants.Y22:
                         j = 1;
                         break;
-                    case Constants.Y3:
+                    case Constants.Y33:
                         j = 2;
                         break;
                 }
                 break;
-            case Constants.X2:
+            case Constants.X22:
                 i = 1;
                 switch (posicionBoton.y) {
-                    case Constants.Y1:
+                    case Constants.Y11:
                         j = 0;
                         break;
-                    case Constants.Y2:
+                    case Constants.Y22:
                         j = 1;
                         break;
-                    case Constants.Y3:
+                    case Constants.Y33:
                         j = 2;
                         break;
                 }
                 break;
-            case Constants.X3:
+            case Constants.X33:
                 i = 2;
                 switch (posicionBoton.y) {
-                    case Constants.Y1:
+                    case Constants.Y11:
                         j = 0;
                         break;
-                    case Constants.Y2:
+                    case Constants.Y22:
                         j = 1;
                         break;
-                    case Constants.Y3:
+                    case Constants.Y33:
                         j = 2;
                         break;
                 }
@@ -253,7 +251,6 @@ public class Tablero extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         if (e.getSource().equals(restart)) {//Si el boton es restart
             restart();
             marcadorX = 0;//Restablecemos los marcadores y el turno
@@ -357,7 +354,6 @@ public class Tablero extends JPanel implements ActionListener {
                 casillaOcupada[i][j] = Constants.CASILLAVACIA;
             }
         }
-
     }
 
     private void comprobarGanador() {
