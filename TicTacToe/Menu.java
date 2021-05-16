@@ -2,22 +2,20 @@ package TicTacToe;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class Menu extends JLabel{
+public class Menu extends JLabel {
 
     JPanel panel = new JPanel();
     JLabel titulo = new JLabel("Tic Tac Toe");//Creamos el label
     JButton start2 = new JButton("3 en raya");
     JButton start1 = new JButton("4 en raya");
     JButton exit = new JButton("Salir");
-    
-
+    ImageIcon gif = new ImageIcon("menu.gif");//Creamos un icono gif
     public Menu() {
         iniciarComponentes();
     }
@@ -30,8 +28,11 @@ public class Menu extends JLabel{
     }
 
     private void putPanel() {
+        panel.setSize(700,500);
+        panel.setBackground(Color.WHITE);
         this.setLayout(null);//Desactivando el diseño
-        this.setBackground(Color.WHITE);
+        panel.setLayout(null);//Desactivando el diseño
+        this.add(panel);
 
     }
 
@@ -40,13 +41,10 @@ public class Menu extends JLabel{
         titulo.setBounds(80, 10, 300, 80);//Establecemos el tamaño y posicion de la etiqueta
         titulo.setHorizontalAlignment(SwingConstants.CENTER);//Establecemos la alineacion horizontal del texto (Se puede poner en el constructor)
 
-        ImageIcon gif = new ImageIcon("menu.gif");//Creamos un icono gif
-        JLabel tablero = new JLabel();
-        tablero.setBounds(90, 80, 300, 300);//Ponemos el tamaño y posición del label
-        tablero.setIcon(new ImageIcon(gif.getImage().getScaledInstance(tablero.getWidth(), tablero.getHeight(), Image.SCALE_SMOOTH)));
-
+        JLabel tablero = new JLabel(gif);
+        tablero.setBounds(80, 80, 320, 320);//Ponemos el tamaño y posición del label
         this.add(tablero);//Añadimos las etiquetas al panel
-        this.add(titulo);
+        panel.add(titulo);
 
     }
 
@@ -63,9 +61,9 @@ public class Menu extends JLabel{
         start1.setFont(new Font("arial", Font.BOLD, 25));//Ponemos el tipo de letra y tamaño
         start2.setFont(new Font("arial", Font.BOLD, 25));
         exit.setFont(new Font("arial", Font.BOLD, 25));
-        this.add(start1);
-        this.add(start2);
-        this.add(exit);
+        panel.add(start1);
+        panel.add(start2);
+        panel.add(exit);
     }
 
 }
