@@ -1,5 +1,11 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package TicTacToe;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -15,16 +21,24 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
  * @author Marina
  */
-public class Tablero extends JPanel implements ActionListener {
+
+public class Tablero extends JPanel implements ActionListener{
 
     private final JButton[][] casillas = new JButton[Constants.FILAS][Constants.COLUMNAS];//Creamos las casillas
     private int casillaOcupada[][] = {{0, 0, 0},
@@ -43,12 +57,15 @@ public class Tablero extends JPanel implements ActionListener {
     JButton opciones = new JButton("Options");
     private boolean sound = false;
     private boolean empate = false;
+    private boolean ganador = false;
     public int marcadorX = 0;
     public int marcadorO = 0;
     private int contadorCasillas = 0;
     public String nombre1 = "";
     public String nombre2 = "";
     public int partida;
+    private int escenarioPartida = Constants.SEGUIRJUGANDO;
+    private boolean diagonal = false;
 
     public Tablero() {
         iniciarComponentes();
@@ -187,7 +204,7 @@ public class Tablero extends JPanel implements ActionListener {
 
     }
 
-    private boolean comprobarEmpate() {
+    /*private boolean comprobarEmpate() {
 
         if (contadorCasillas == 9 - 1) {
             empate = true;
@@ -196,11 +213,19 @@ public class Tablero extends JPanel implements ActionListener {
         }
 
         return empate;
+    }*/
+    
+    private int comprobarEmpate() {
+        if (contadorCasillas == 9 - 1) {
+            return Constants.EMPATE;
+        } else {
+            return Constants.SEGUIRJUGANDO;
+        }
     }
 
-    private int comprobarJugada(int jugador) {
+    private int comprobarJugada(int i, int j, int jugador) {
 
-        if (((casillaOcupada[0][0] == jugador) && (casillaOcupada[0][1] == jugador) && (casillaOcupada[0][2] == jugador))
+        /*if (((casillaOcupada[0][0] == jugador) && (casillaOcupada[0][1] == jugador) && (casillaOcupada[0][2] == jugador))
                 || ((casillaOcupada[1][0] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[1][2] == jugador))
                 || ((casillaOcupada[2][0] == jugador) && (casillaOcupada[2][1] == jugador) && (casillaOcupada[2][2] == jugador))
                 || ((casillaOcupada[0][0] == jugador) && (casillaOcupada[1][0] == jugador) && (casillaOcupada[2][0] == jugador))
@@ -210,13 +235,83 @@ public class Tablero extends JPanel implements ActionListener {
                 || ((casillaOcupada[0][2] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][0] == jugador))) {
 
             return jugador;
+        }*/
+        
+        if(contadorCasillas < 9-1) {
+            if(comprobarFilas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
+                if(comprobarColumnas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
+                    if(comprobarDiagonal(i, j) == true) {
+                        if(comprobarDiagonalADerechas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
+                            if(comprobarDiagonalAIzquierdas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
+                                return Constants.SEGUIRJUGANDO;
+                            } else {
+                                return jugador;
+                            }
+                        } else {
+                            return jugador;
+                        }
+                    } else {
+                        return Constants.SEGUIRJUGANDO;
+                    }
+                } else {
+                    return jugador;
+                }
+            } else {
+                return jugador;
+            }
         } else {
+            return Constants.EMPATE;
+        }
+            
+        /*else {
             if (comprobarEmpate()) {
                 return Constants.EMPATE;
             } else {
                 return Constants.SEGUIRJUGANDO;
             }
+        }*/
+    }
+    
+    private int comprobarFilas(int i, int j, int jugador) {
+        if((casillaOcupada[i][j] == jugador) && (casillaOcupada[i][(j+1)%3] == jugador) && (casillaOcupada[i][(j+2)%3] == jugador)) {
+            return jugador;
+        } else {
+            return Constants.SEGUIRJUGANDO;
         }
+    }
+    
+    private int comprobarColumnas(int i, int j, int jugador) {
+        if((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i+1)%3][j] == jugador) && (casillaOcupada[(i+2)%3][j] == jugador)) {
+            return jugador;
+        } else {
+            return Constants.SEGUIRJUGANDO;
+        }
+    }
+    
+    private int comprobarDiagonalADerechas(int i, int j, int jugador) {
+        if((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i+1)%3][(j+1)%3] == jugador) && (casillaOcupada[(i+2)%3][(j+2)%3] == jugador)) {
+            return jugador;
+        } else {
+            return Constants.SEGUIRJUGANDO;
+        }
+    }
+    
+    private int comprobarDiagonalAIzquierdas(int i, int j, int jugador) {
+        if((casillaOcupada[i][(j+2)%3] == jugador) && (casillaOcupada[(i+1)%3][(j+1)%3] == jugador) && (casillaOcupada[(i+2)%3][j] == jugador)) {
+            return jugador;
+        } else {
+            return Constants.SEGUIRJUGANDO;
+        }
+    }
+    
+    private boolean comprobarDiagonal(int i, int j) {
+        if((i==0) && (j==1) || ((i==1) && (j==0)) || ((i==2) && (j==1)) || ((i==1) && (j==0))) {
+            diagonal = false;
+        } else {
+            diagonal = true;
+        }
+        
+        return diagonal;
     }
 
     private void ganadorJugada(int ganador) {
@@ -277,7 +372,7 @@ public class Tablero extends JPanel implements ActionListener {
                 //casilla.setEnabled(false);
                 casilla.setName(nombre1);
                 comprobarPosicion(casilla.getBounds(), casilla.getName());
-                int jugadorGanador = comprobarJugada(Constants.JUGADORX);
+                int jugadorGanador = comprobarJugada(casilla.getX(), casilla.getY(), Constants.JUGADORX);
                 ganadorJugada(jugadorGanador);
             } else {//Si es el turno de O
                 casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
@@ -286,8 +381,8 @@ public class Tablero extends JPanel implements ActionListener {
                 //casilla.setEnabled(false);
                 casilla.setName(nombre2);
                 comprobarPosicion(casilla.getBounds(), casilla.getName());
-                int jugadorGanador = comprobarJugada(Constants.JUGADORO);
-                ganadorJugada(jugadorGanador);
+                int situacionPartida = comprobarJugada(casilla.getX(), casilla.getY(), Constants.JUGADORO);
+                ganadorJugada(situacionPartida);
             }
             turno++;//Pasamos el turno
 
