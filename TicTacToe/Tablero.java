@@ -12,6 +12,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -225,7 +226,7 @@ public class Tablero extends JPanel implements ActionListener {
         if (ganador != Constants.SEGUIRJUGANDO) {
             for (int i = 0; i < Constants.FILAS; i++) {
                 for (int j = 0; j < Constants.COLUMNAS; j++) {
-                    casillas[i][j].setEnabled(false);
+                    //casillas[i][j].setEnabled(false);
                 }
             }
 
@@ -234,18 +235,19 @@ public class Tablero extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
                     marcadorX++;
                     jugadorX.setText(nombre1 + "(X): " + marcadorX);
-                    
+
                     break;
                 case Constants.JUGADORO:
                     JOptionPane.showMessageDialog(null, "Ha ganado el Jugador O");
                     marcadorO++;
+                    jugadorO.setText(nombre2 + "(O): " + marcadorO);
                     break;
                 default:
                     JOptionPane.showMessageDialog(null, "Empate");
                     break;
             }
             restart();
-            
+
         }
     }
 
@@ -256,6 +258,8 @@ public class Tablero extends JPanel implements ActionListener {
             restart();
             marcadorX = 0;//Restablecemos los marcadores y el turno
             marcadorO = 0;
+            jugadorX.setText(nombre1 + "(X): " + marcadorX);
+            jugadorO.setText(nombre2 + "(O): " + marcadorO);
             turno = 0;
         } else if (e.getSource().equals(exit)) {//Si el boton es exit
             System.exit(0);//Salimos y paramos el programa
@@ -273,7 +277,7 @@ public class Tablero extends JPanel implements ActionListener {
             if (turno % 2 == 0) {//Si es el turno de X
                 casilla.setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
                 contadorCasillas++;
-                casilla.setEnabled(false);
+                //casilla.setEnabled(false);
                 casilla.setName(nombre1);
                 comprobarPosicion(casilla.getBounds(), casilla.getName());
                 int jugadorGanador = comprobarJugada(Constants.JUGADORX);
@@ -282,7 +286,7 @@ public class Tablero extends JPanel implements ActionListener {
                 casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
                 casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
                 contadorCasillas++;
-                casilla.setEnabled(false);
+                //casilla.setEnabled(false);
                 casilla.setName(nombre2);
                 comprobarPosicion(casilla.getBounds(), casilla.getName());
                 int jugadorGanador = comprobarJugada(Constants.JUGADORO);
@@ -290,26 +294,27 @@ public class Tablero extends JPanel implements ActionListener {
             }
             turno++;//Pasamos el turno
 
-            if (sound) {//Comprobamos la variable sonido y reproducimos el sonido o no
-                reproducirSonido();
-            }
+            reproducirSonido(sound);
+
             comprobarGanador();
         }
     }
 
-    private void reproducirSonido() {
-        try {
-            // Se obtiene un Clip de sonido
-            Clip s = AudioSystem.getClip();
+    private void reproducirSonido(boolean sonido) {
+        if (sonido) {
+            try {
+                // Se obtiene un Clip de sonido
+                Clip s = AudioSystem.getClip();
 
-            // Se carga con un fichero wav
-            s.open(AudioSystem.getAudioInputStream(new File("ficha.wav")));
+                // Se carga con un fichero wav
+                s.open(AudioSystem.getAudioInputStream(new File("ficha.wav")));
 
-            // Comienza la reproducción
-            s.start();
+                // Comienza la reproducción
+                s.start();
 
-        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
-            System.out.println("" + ex);
+            } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+                System.out.println("" + ex);
+            }
         }
     }
 
@@ -352,17 +357,36 @@ public class Tablero extends JPanel implements ActionListener {
                 casillaOcupada[i][j] = Constants.CASILLAVACIA;
             }
         }
-        jugadorX.setText(nombre1 + "(X): " + marcadorX);
-        jugadorO.setText(nombre2 + "(O): " + marcadorO);
+
     }
-    private void comprobarGanador(){
-        if(marcadorX == partida){
-            JOptionPane.showMessageDialog(null, "El ganador es: " + nombre1 + "(X)");
-            restart();
+
+    private void comprobarGanador() {
+        Icon icono = new ImageIcon("trofeore.png");
+        if (marcadorX == partida) {
+            JOptionPane.showMessageDialog(null, "Felicidades " + nombre1 + "(X) Has ganado :)", "Victoria", JOptionPane.PLAIN_MESSAGE, icono);
+            sonidoVictoria(sound);
         }
-        if(marcadorO == partida){
-            JOptionPane.showMessageDialog(null, "El ganador es: " + nombre2 + "(O)");
-            restart();
+        if (marcadorO == partida) {
+            JOptionPane.showMessageDialog(null, "Felicidades " + nombre2 + "(O) Has ganado :)", "Victoria", JOptionPane.PLAIN_MESSAGE, icono);
+            sonidoVictoria(sound);
+        }
+    }
+
+    private void sonidoVictoria(boolean sonido) {
+        if (sonido) {
+            try {
+                // Se obtiene un Clip de sonido
+                Clip s = AudioSystem.getClip();
+
+                // Se carga con un fichero wav
+                s.open(AudioSystem.getAudioInputStream(new File("win.wav")));
+
+                // Comienza la reproducción
+                s.start();
+
+            } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+                System.out.println("" + ex);
+            }
         }
     }
 }
