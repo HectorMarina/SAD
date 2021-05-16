@@ -2,6 +2,7 @@ package TicTacToe;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,11 +13,10 @@ public class Menu extends JLabel{
 
     JPanel panel = new JPanel();
     JLabel titulo = new JLabel("Tic Tac Toe");//Creamos el label
-    JButton start2 = new JButton("Modo 2 jugadores");
-    JButton start1 = new JButton("Modo 1 jugador");
+    JButton start2 = new JButton("3 en raya");
+    JButton start1 = new JButton("4 en raya");
     JButton exit = new JButton("Salir");
-    ImageIcon gif = new ImageIcon("menu.gif");//Creamos un icono gif
-    JLabel tablero = new JLabel(gif);
+    
 
     public Menu() {
         iniciarComponentes();
@@ -40,7 +40,10 @@ public class Menu extends JLabel{
         titulo.setBounds(80, 10, 300, 80);//Establecemos el tamaño y posicion de la etiqueta
         titulo.setHorizontalAlignment(SwingConstants.CENTER);//Establecemos la alineacion horizontal del texto (Se puede poner en el constructor)
 
-        tablero.setBounds(80, 80, 300, 300);//Ponemos el tamaño y posición del label
+        ImageIcon gif = new ImageIcon("menu.gif");//Creamos un icono gif
+        JLabel tablero = new JLabel();
+        tablero.setBounds(90, 80, 300, 300);//Ponemos el tamaño y posición del label
+        tablero.setIcon(new ImageIcon(gif.getImage().getScaledInstance(tablero.getWidth(), tablero.getHeight(), Image.SCALE_SMOOTH)));
 
         this.add(tablero);//Añadimos las etiquetas al panel
         this.add(titulo);
