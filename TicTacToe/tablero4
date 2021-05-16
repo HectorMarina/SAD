@@ -173,8 +173,7 @@ public class Tablero4 extends JPanel implements ActionListener {
         } else {
             JButton casilla = (JButton) e.getSource();
             int x = obtenerPos(casilla.getX());
-            int y = obtenerUltimaFila(casilla.getY());
-            System.out.println(x + "    " + y);
+            int y = obtenerUltimaFila(x);
             if (turno % 2 == 0) {//Si es el turno de roja
                 casillas[x][y].setIcon(new ImageIcon(roja.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
             } else if (turno % 2 != 0) {//Si es el turno de amarilla
@@ -185,12 +184,10 @@ public class Tablero4 extends JPanel implements ActionListener {
         }
     }
 
-    private int obtenerUltimaFila(int pos) {
-
-        int i = obtenerPos(pos);
-        for (int j = 5; j > 0; j++) {
+    private int obtenerUltimaFila(int i) {
+        for (int j = 5; j > 0; j--) {
             if (casillasOcupada[i][j] == 0) {
-                //ocuparCasilla(i, j);
+                ocuparCasilla(i, j);
                 return j;
             }
         }
@@ -227,9 +224,9 @@ public class Tablero4 extends JPanel implements ActionListener {
 
     private void ocuparCasilla(int i, int j) {
         if (turno % 2 != 0) {
-            casillasOcupada[i][j] = 1;
+            casillasOcupada[i][j] = Constants.JUGADORX;
         } else {
-            casillasOcupada[i][j] = 2;
+            casillasOcupada[i][j] = Constants.JUGADORO;
         }
     }
 
