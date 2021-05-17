@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package TicTacToe;
 
 import java.awt.Color;
@@ -23,18 +18,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-/**
- *
- * @author Marina
- */
 public class Tablero4 extends JPanel implements ActionListener {
-    private final JButton[][] casillas = new JButton[Constants.FILAS4][Constants.COLUMNAS4];//Creamos las casillas
+
+    private final JButton[][] casillas = new JButton[7][6];//Creamos las casillas
 
     private final ImageIcon casillaVacia = new ImageIcon("casillaVacia4.png");//Creamos la imagen de casilla vacía
     private final ImageIcon roja = new ImageIcon("rojo.png");//Creamos la imagen de casilla X
     private final ImageIcon amarilla = new ImageIcon("amarillo.png");//Creamos la imagen de casilla O
     private int turno = 0;
-    private int casillasOcupada[][] = {{0, 0, 0, 0, 0, 0, 0},
+    private int casillasOcupadas[][] = {{0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
@@ -57,8 +49,7 @@ public class Tablero4 extends JPanel implements ActionListener {
     public int partida;
 
     public Tablero4() {
-          iniciarComponentes();
-          this.setBackground(Color.WHITE);
+        iniciarComponentes();
 
     }
 
@@ -101,9 +92,30 @@ public class Tablero4 extends JPanel implements ActionListener {
     private void putCasillas() {
         int y = 0;
         int x = 0;
-        for (int i = 0; i < Constants.FILAS4; i++) {
-            for (int j = 0; j < Constants.COLUMNAS4; j++) {
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {
                 switch (j) {
+                    case 0:
+                        y = Constants.Y1;
+                        break;
+                    case 1:
+                        y = Constants.Y2;
+                        break;
+                    case 2:
+                        y = Constants.Y3;
+                        break;
+                    case 3:
+                        y = Constants.Y4;
+                        break;
+                    case 4:
+                        y = Constants.Y5;
+                        break;
+                    case 5:
+                        y = Constants.Y6;
+                        break;
+
+                }
+                switch (i) {
                     case 0:
                         x = Constants.X1;
                         break;
@@ -125,60 +137,17 @@ public class Tablero4 extends JPanel implements ActionListener {
                     case 6:
                         x = Constants.X7;
                         break;
-
                 }
-                switch (i) {
-                    case 0:
-                        y = Constants.Y1;
-                        break;
-                    case 1:
-                        y = Constants.Y2;
-                        break;
-                    case 2:
-                        y = Constants.Y3;
-                        break;
-                    case 3:
-                        y = Constants.Y4;
-                        break;
-                    case 4:
-                        y = Constants.Y5;
-                        break;
-                    case 5:
-                        y = Constants.Y6;
-                        break;
-                }
-                
                 casillas[i][j] = new JButton();//Creamos el boton
                 casillas[i][j].setBounds(x, y, Constants.SQUARE4, Constants.SQUARE4);//Dimensionamos y decidimos su posición
                 casillas[i][j].setBackground(Color.WHITE);
-                casillas[i][j].setBorderPainted(false);//Quitamos los bordes del boton
+                //casillas[i][j].setBorderPainted(false);//Quitamos los bordes del boton
                 casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
                 casillas[i][j].addActionListener(this);//Añadimos el ActionListener a las casillas
                 this.add(casillas[i][j]);//Añadimos el boton al panel    
             }
         }
     }
-    
-    /*private int comprobarJugada(int jugador) {
-
-        if (((casillasOcupada[0][0] == jugador) && (casillasOcupada[0][1] == jugador) && (casillasOcupada[0][2] == jugador))
-                || ((casillasOcupada[1][0] == jugador) && (casillasOcupada[1][1] == jugador) && (casillasOcupada[1][2] == jugador))
-                || ((casillasOcupada[2][0] == jugador) && (casillasOcupada[2][1] == jugador) && (casillasOcupada[2][2] == jugador))
-                || ((casillasOcupada[0][0] == jugador) && (casillasOcupada[1][0] == jugador) && (casillasOcupada[2][0] == jugador))
-                || ((casillasOcupada[0][1] == jugador) && (casillasOcupada[1][1] == jugador) && (casillasOcupada[2][1] == jugador))
-                || ((casillasOcupada[0][2] == jugador) && (casillasOcupada[1][2] == jugador) && (casillasOcupada[2][2] == jugador))
-                || ((casillasOcupada[0][0] == jugador) && (casillasOcupada[1][1] == jugador) && (casillasOcupada[2][2] == jugador))
-                || ((casillasOcupada[0][2] == jugador) && (casillasOcupada[1][1] == jugador) && (casillasOcupada[2][0] == jugador))) {
-
-            return jugador;
-        } else {
-            if (comprobarEmpate()) {
-                return Constants.EMPATE;
-            } else {
-                return Constants.SEGUIRJUGANDO;
-            }
-        }
-    }*/
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -202,26 +171,26 @@ public class Tablero4 extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, " Press alt + m(Menu) / r(Restart) / s(Sound on/off) / e(Exit)", "Options", 1);//Mostaramos la ventana emergente con los comandos
         } else {
             JButton casilla = (JButton) e.getSource();
-            int y = obtenerPosY(casilla.getX());
-            int x = obtenerUltimaFila(casilla.getY());
-            System.out.println(x + "    " + y);
-            if (turno % 2 == 0) {//Si es el turno de roja
-                casillas[x][y].setIcon(new ImageIcon(roja.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
-            } else if (turno % 2 != 0) {//Si es el turno de amarilla
-                casillas[x][y].setIcon(new ImageIcon(amarilla.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+            if (casillasOcupadas[obtenerPosX(casilla.getY())][obtenerPosY(casilla.getX())] == Constants.CASILLAVACIA) {
+                int x = obtenerPosY(casilla.getX());
+                int y = obtenerUltimaFila(x);
+                System.out.println(x + " " + y);
+                if (turno % 2 == 0) {//Si es el turno de roja
+                    casillas[x][y].setIcon(new ImageIcon(roja.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+                } else if (turno % 2 != 0) {//Si es el turno de amarilla
+                    casillas[x][y].setIcon(new ImageIcon(amarilla.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+                }
+                turno++;//Pasamos el turno
+                reproducirSonido(sound);
             }
-            turno++;//Pasamos el turno
-            reproducirSonido(sound);
         }
     }
 
-    private int obtenerUltimaFila(int pos) {
-
-        int i = obtenerPosX(pos);
-        for (int j = 5; j > 0; j--) {
-            if (casillasOcupada[i][j] == Constants.CASILLAVACIA) {
+    private int obtenerUltimaFila(int j) {
+        for (int i = 5; i > 0; i--) {
+            if (casillasOcupadas[i][j] == 0) {
                 ocuparCasilla(i, j);
-                return j;
+                return i;
             }
         }
         return 0;
@@ -252,10 +221,8 @@ public class Tablero4 extends JPanel implements ActionListener {
                 i = 6;
                 break;
         }
-        
         return i;
     }
-    
     private int obtenerPosX(int pos) {
         int i = 0;
         switch (pos) {
@@ -268,7 +235,7 @@ public class Tablero4 extends JPanel implements ActionListener {
             case Constants.Y3:
                 i = 2;
                 break;
-            case Constants.Y4:
+                case Constants.Y4:
                 i = 3;
                 break;
             case Constants.Y5:
@@ -277,16 +244,18 @@ public class Tablero4 extends JPanel implements ActionListener {
             case Constants.Y6:
                 i = 5;
                 break;
+            case Constants.Y7:
+                i = 6;
+                break;
         }
-        
         return i;
     }
 
     private void ocuparCasilla(int i, int j) {
         if (turno % 2 != 0) {
-            casillasOcupada[i][j] = 1;
+            casillasOcupadas[i][j] = Constants.JUGADORX;
         } else {
-            casillasOcupada[i][j] = 2;
+            casillasOcupadas[i][j] = Constants.JUGADORO;
         }
     }
 
@@ -322,11 +291,11 @@ public class Tablero4 extends JPanel implements ActionListener {
     }
 
     private void restart() {
-        for (int i = 0; i < Constants.FILAS4; i++) {
-            for (int j = 0; j < Constants.COLUMNAS4; j++) {//Ponemos todas las casillas vacias otra vez
+        for (int i = 0; i < Constants.COLUMNAS4; i++) {
+            for (int j = 0; j < Constants.FILAS4; j++) {//Ponemos todas las casillas vacias otra vez
                 casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
                 casillas[i][j].setEnabled(true);
-                casillasOcupada[i][j] = Constants.CASILLAVACIA;
+                casillasOcupadas[i][j] = Constants.CASILLAVACIA;
             }
         }
     }
