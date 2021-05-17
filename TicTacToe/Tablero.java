@@ -37,16 +37,12 @@ public class Tablero extends JPanel implements ActionListener {
     JButton exit = new JButton("Exit");
     JButton opciones = new JButton("Options");
     private boolean sound = false;
-    private boolean empate = false;
-    private boolean ganador = false;
     public int marcadorX = 0;
     public int marcadorO = 0;
     private int contadorCasillas = 0;
     public String nombre1 = "";
     public String nombre2 = "";
     public int partida;
-    private int escenarioPartida = Constants.SEGUIRJUGANDO;
-    private boolean diagonal = false;
 
     public Tablero() {
         iniciarComponentes();
