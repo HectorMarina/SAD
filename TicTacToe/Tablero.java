@@ -140,10 +140,7 @@ public class Tablero extends JPanel implements ActionListener {
                 }
             }
         }
-        if (contador == 9) {
-            return true;
-        }
-        return false;
+        return contador == 9;
     }
 
     private void estadoDelJuego(int jugador) {
