@@ -542,7 +542,7 @@ public class Tablero extends JPanel implements ActionListener{
                 Clip s = AudioSystem.getClip();
 
                 // Se carga con un fichero wav
-                s.open(AudioSystem.getAudioInputStream(new File("winSonido.wav")));
+                s.open(AudioSystem.getAudioInputStream(new File("win.wav")));
 
                 // Comienza la reproducción
                 s.start();
