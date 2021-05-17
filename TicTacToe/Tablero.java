@@ -43,6 +43,7 @@ public class Tablero extends JPanel implements ActionListener {
     public String nombre1 = "";
     public String nombre2 = "";
     public int partida;
+    private boolean ganador = false;
 
     public Tablero() {
         iniciarComponentes();
@@ -135,7 +136,7 @@ public class Tablero extends JPanel implements ActionListener {
         int contador = 0;
         for (int i = 0; i < Constants.FILAS; i++) {
             for (int j = 0; j < Constants.COLUMNAS; j++) {
-                if (casillaOcupada[i][j] != 0) {
+                if (casillaOcupada[i][j] != 0 && ganador == false) {
                     contador++;
                 }
             }
@@ -147,6 +148,7 @@ public class Tablero extends JPanel implements ActionListener {
         if (!comprobarEmpate()) {
             if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
                 ganadorJugada(jugador);
+                ganador = true;
             }
         } else {
             JOptionPane.showMessageDialog(null, "Empate");
@@ -334,6 +336,7 @@ public class Tablero extends JPanel implements ActionListener {
                 casillas[i][j].setEnabled(true);
                 casillaOcupada[i][j] = Constants.CASILLAVACIA;
                 contadorCasillas = 0;
+                ganador = false;
             }
         }
     }
