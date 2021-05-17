@@ -223,7 +223,7 @@ public class Tablero extends JPanel implements ActionListener{
         }
     }
 
-    private int comprobarJugada(int i, int j, int jugador) {
+    private int comprobarGanadorJugada(int i, int j, int jugador) {
 
         /*if (((casillaOcupada[0][0] == jugador) && (casillaOcupada[0][1] == jugador) && (casillaOcupada[0][2] == jugador))
                 || ((casillaOcupada[1][0] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[1][2] == jugador))
@@ -237,7 +237,7 @@ public class Tablero extends JPanel implements ActionListener{
             return jugador;
         }*/
         
-        if(contadorCasillas < 9-1) {
+        if(contadorCasillas <= 9) {
             if(comprobarFilas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
                 if(comprobarColumnas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
                     if(comprobarDiagonal(i, j) == true) {
@@ -313,15 +313,30 @@ public class Tablero extends JPanel implements ActionListener{
         
         return diagonal;
     }
+    
+    private int comprobarJugada(int jugadorGanador) {
+        
+        if(jugadorGanador == Constants.SEGUIRJUGANDO) {
+            return comprobarEmpate();
+        } else {
+            return jugadorGanador;
+        }
+    }
+    
+    private void comprobarPartida(int situacionPartida) {
+        if(situacionPartida != Constants.SEGUIRJUGANDO) {
+            ganadorJugada(situacionPartida);
+        }
+    }
 
     private void ganadorJugada(int ganador) {
 
-        if (ganador != Constants.SEGUIRJUGANDO) {
-            for (int i = 0; i < Constants.FILAS; i++) {
+        //if (ganador != Constants.SEGUIRJUGANDO) {
+            /*for (int i = 0; i < Constants.FILAS; i++) {
                 for (int j = 0; j < Constants.COLUMNAS; j++) {
                     //casillas[i][j].setEnabled(false);
                 }
-            }
+            }*/
 
             switch (ganador) {
                 case Constants.JUGADORX:
@@ -341,7 +356,7 @@ public class Tablero extends JPanel implements ActionListener{
             }
             restart();
 
-        }
+        //}
     }
 
     @Override
@@ -372,8 +387,9 @@ public class Tablero extends JPanel implements ActionListener{
                 //casilla.setEnabled(false);
                 casilla.setName(nombre1);
                 comprobarPosicion(casilla.getBounds(), casilla.getName());
-                int jugadorGanador = comprobarJugada(casilla.getX(), casilla.getY(), Constants.JUGADORX);
-                ganadorJugada(jugadorGanador);
+                int jugadorGanador = comprobarGanadorJugada(obtenerPosX(casilla.getY()), obtenerPosY(casilla.getX()), Constants.JUGADORX);
+                int situacionPartida = comprobarJugada(jugadorGanador);
+                comprobarPartida(situacionPartida);
             } else {//Si es el turno de O
                 casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
                 casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
@@ -381,8 +397,9 @@ public class Tablero extends JPanel implements ActionListener{
                 //casilla.setEnabled(false);
                 casilla.setName(nombre2);
                 comprobarPosicion(casilla.getBounds(), casilla.getName());
-                int situacionPartida = comprobarJugada(casilla.getX(), casilla.getY(), Constants.JUGADORO);
-                ganadorJugada(situacionPartida);
+                int jugadorGanador = comprobarGanadorJugada(obtenerPosX(casilla.getY()), obtenerPosY(casilla.getX()), Constants.JUGADORO);
+                int situacionPartida = comprobarJugada(jugadorGanador);
+                comprobarPartida(situacionPartida);
             }
             turno++;//Pasamos el turno
 
@@ -408,6 +425,40 @@ public class Tablero extends JPanel implements ActionListener{
                 System.out.println("" + ex);
             }
         }
+    }
+    
+    private int obtenerPosX(int pos) {
+        int i = 0;
+        switch (pos) {
+            case Constants.Y11:
+                i = 0;
+                break;
+            case Constants.Y22:
+                i = 1;
+                break;
+            case Constants.Y33:
+                i = 2;
+                break;
+        }
+        
+        return i;
+    }
+    
+    private int obtenerPosY(int pos) {
+        int i = 0;
+        switch (pos) {
+            case Constants.X11:
+                i = 0;
+                break;
+            case Constants.X22:
+                i = 1;
+                break;
+            case Constants.X33:
+                i = 2;
+                break;
+        }
+        
+        return i;
     }
 
     private void menuOpciones() {
@@ -447,6 +498,7 @@ public class Tablero extends JPanel implements ActionListener{
                 casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
                 casillas[i][j].setEnabled(true);
                 casillaOcupada[i][j] = Constants.CASILLAVACIA;
+                contadorCasillas = 0;
             }
         }
     }
