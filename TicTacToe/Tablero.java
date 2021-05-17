@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package TicTacToe;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -21,24 +15,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-/**
- *
- * @author Marina
- */
-
-public class Tablero extends JPanel implements ActionListener{
+public class Tablero extends JPanel implements ActionListener {
 
     private final JButton[][] casillas = new JButton[Constants.FILAS][Constants.COLUMNAS];//Creamos las casillas
     private int casillaOcupada[][] = {{0, 0, 0},
@@ -70,7 +52,7 @@ public class Tablero extends JPanel implements ActionListener{
     public Tablero() {
         iniciarComponentes();
     }
-    
+
     private void iniciarComponentes() {
         putPanel();
         putTablero();
@@ -205,16 +187,13 @@ public class Tablero extends JPanel implements ActionListener{
     }
 
     /*private boolean comprobarEmpate() {
-
         if (contadorCasillas == 9 - 1) {
             empate = true;
         } else {
             empate = false;
         }
-
         return empate;
     }*/
-    
     private int comprobarEmpate() {
         if (contadorCasillas == 9 - 1) {
             return Constants.EMPATE;
@@ -233,98 +212,66 @@ public class Tablero extends JPanel implements ActionListener{
                 || ((casillaOcupada[0][2] == jugador) && (casillaOcupada[1][2] == jugador) && (casillaOcupada[2][2] == jugador))
                 || ((casillaOcupada[0][0] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][2] == jugador))
                 || ((casillaOcupada[0][2] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][0] == jugador))) {
-
             return jugador;
         }*/
-        
-        if(contadorCasillas <= 9) {
-            if(comprobarFilas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
-                if(comprobarColumnas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
-                    if(comprobarDiagonal(i, j) == true) {
-                        if(comprobarDiagonalADerechas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
-                            if(comprobarDiagonalAIzquierdas(i, j, jugador) == Constants.SEGUIRJUGANDO) {
-                                return Constants.SEGUIRJUGANDO;
-                            } else {
-                                return jugador;
-                            }
-                        } else {
-                            return jugador;
-                        }
-                    } else {
-                        return Constants.SEGUIRJUGANDO;
-                    }
-                } else {
-                    return jugador;
-                }
-            } else {
+        if (contadorCasillas <= 9) {
+            if (comprobarFilas(i, j, jugador) != Constants.SEGUIRJUGANDO ||comprobarColumnas(i, j, jugador) != Constants.SEGUIRJUGANDO || (comprobarDiagonal(i, j) == true)&&(comprobarDiagonalADerechas(i, j, jugador) != Constants.SEGUIRJUGANDO || comprobarDiagonalAIzquierdas(i, j, jugador) != Constants.SEGUIRJUGANDO)) {
                 return jugador;
-            }
-        } else {
-            return Constants.EMPATE;
-        }
-            
-        /*else {
-            if (comprobarEmpate()) {
-                return Constants.EMPATE;
-            } else {
+            }else{
                 return Constants.SEGUIRJUGANDO;
             }
-        }*/
+            } else {
+            return Constants.EMPATE;
+        }
     }
-    
+
     private int comprobarFilas(int i, int j, int jugador) {
-        if((casillaOcupada[i][j] == jugador) && (casillaOcupada[i][(j+1)%3] == jugador) && (casillaOcupada[i][(j+2)%3] == jugador)) {
+        if ((casillaOcupada[i][j] == jugador) && (casillaOcupada[i][(j + 1) % 3] == jugador) && (casillaOcupada[i][(j + 2) % 3] == jugador)) {
             return jugador;
         } else {
             return Constants.SEGUIRJUGANDO;
         }
     }
-    
+
     private int comprobarColumnas(int i, int j, int jugador) {
-        if((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i+1)%3][j] == jugador) && (casillaOcupada[(i+2)%3][j] == jugador)) {
+        if ((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i + 1) % 3][j] == jugador) && (casillaOcupada[(i + 2) % 3][j] == jugador)) {
             return jugador;
         } else {
             return Constants.SEGUIRJUGANDO;
         }
     }
-    
+
     private int comprobarDiagonalADerechas(int i, int j, int jugador) {
-        if((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i+1)%3][(j+1)%3] == jugador) && (casillaOcupada[(i+2)%3][(j+2)%3] == jugador)) {
+        if ((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i + 1) % 3][(j + 1) % 3] == jugador) && (casillaOcupada[(i + 2) % 3][(j + 2) % 3] == jugador)) {
             return jugador;
         } else {
             return Constants.SEGUIRJUGANDO;
         }
     }
-    
+
     private int comprobarDiagonalAIzquierdas(int i, int j, int jugador) {
-        if((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i+2)%3][(j+1)%3] == jugador) && (casillaOcupada[(i+1)%3][(j+2)%3] == jugador)) {
+        if ((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i + 2) % 3][(j + 1) % 3] == jugador) && (casillaOcupada[(i + 1) % 3][(j + 2) % 3] == jugador)) {
             return jugador;
         } else {
             return Constants.SEGUIRJUGANDO;
         }
     }
-    
+
     private boolean comprobarDiagonal(int i, int j) {
-        if((i==0) && (j==1) || ((i==1) && (j==0)) || ((i==2) && (j==1)) || ((i==1) && (j==0))) {
-            diagonal = false;
-        } else {
-            diagonal = true;
-        }
-        
-        return diagonal;
+        return !((i == 0) && (j == 1) || ((i == 1) && (j == 0)) || ((i == 2) && (j == 1)) || ((i == 1) && (j == 0)));
     }
-    
+
     private int comprobarJugada(int jugadorGanador) {
-        
-        if(jugadorGanador == Constants.SEGUIRJUGANDO) {
+
+        if (jugadorGanador == Constants.SEGUIRJUGANDO) {
             return comprobarEmpate();
         } else {
             return jugadorGanador;
         }
     }
-    
+
     private void comprobarPartida(int situacionPartida) {
-        if(situacionPartida != Constants.SEGUIRJUGANDO) {
+        if (situacionPartida != Constants.SEGUIRJUGANDO) {
             ganadorJugada(situacionPartida);
         }
     }
@@ -332,29 +279,28 @@ public class Tablero extends JPanel implements ActionListener{
     private void ganadorJugada(int ganador) {
 
         //if (ganador != Constants.SEGUIRJUGANDO) {
-            /*for (int i = 0; i < Constants.FILAS; i++) {
+        /*for (int i = 0; i < Constants.FILAS; i++) {
                 for (int j = 0; j < Constants.COLUMNAS; j++) {
                     //casillas[i][j].setEnabled(false);
                 }
             }*/
+        switch (ganador) {
+            case Constants.JUGADORX:
+                JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
+                marcadorX++;
+                jugadorX.setText(nombre1 + "(X): " + marcadorX);
 
-            switch (ganador) {
-                case Constants.JUGADORX:
-                    JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
-                    marcadorX++;
-                    jugadorX.setText(nombre1 + "(X): " + marcadorX);
-
-                    break;
-                case Constants.JUGADORO:
-                    JOptionPane.showMessageDialog(null, "Ha ganado el Jugador O");
-                    marcadorO++;
-                    jugadorO.setText(nombre2 + "(O): " + marcadorO);
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Empate");
-                    break;
-            }
-            restart();
+                break;
+            case Constants.JUGADORO:
+                JOptionPane.showMessageDialog(null, "Ha ganado el Jugador O");
+                marcadorO++;
+                jugadorO.setText(nombre2 + "(O): " + marcadorO);
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Empate");
+                break;
+        }
+        restart();
 
         //}
     }
@@ -387,7 +333,7 @@ public class Tablero extends JPanel implements ActionListener{
                 //casilla.setEnabled(false);
                 casilla.setName(nombre1);
                 comprobarPosicion(casilla.getBounds(), casilla.getName());
-                int jugadorGanador = comprobarGanadorJugada(obtenerPosX(casilla.getY()), obtenerPosY(casilla.getX()), Constants.JUGADORX);
+                int jugadorGanador = comprobarGanadorJugada(obtenerPosY(casilla.getX()), obtenerPosX(casilla.getY()), Constants.JUGADORX);
                 int situacionPartida = comprobarJugada(jugadorGanador);
                 comprobarPartida(situacionPartida);
             } else {//Si es el turno de O
@@ -397,7 +343,7 @@ public class Tablero extends JPanel implements ActionListener{
                 //casilla.setEnabled(false);
                 casilla.setName(nombre2);
                 comprobarPosicion(casilla.getBounds(), casilla.getName());
-                int jugadorGanador = comprobarGanadorJugada(obtenerPosX(casilla.getY()), obtenerPosY(casilla.getX()), Constants.JUGADORO);
+                int jugadorGanador = comprobarGanadorJugada(obtenerPosY(casilla.getX()), obtenerPosX(casilla.getY()), Constants.JUGADORO);
                 int situacionPartida = comprobarJugada(jugadorGanador);
                 comprobarPartida(situacionPartida);
             }
@@ -426,7 +372,7 @@ public class Tablero extends JPanel implements ActionListener{
             }
         }
     }
-    
+
     private int obtenerPosX(int pos) {
         int i = 0;
         switch (pos) {
@@ -440,10 +386,10 @@ public class Tablero extends JPanel implements ActionListener{
                 i = 2;
                 break;
         }
-        
+
         return i;
     }
-    
+
     private int obtenerPosY(int pos) {
         int i = 0;
         switch (pos) {
@@ -457,7 +403,7 @@ public class Tablero extends JPanel implements ActionListener{
                 i = 2;
                 break;
         }
-        
+
         return i;
     }
 
