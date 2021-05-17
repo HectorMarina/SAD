@@ -297,7 +297,7 @@ public class Tablero extends JPanel implements ActionListener{
     }
     
     private int comprobarDiagonalAIzquierdas(int i, int j, int jugador) {
-        if((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i+2)%3][(j+1)%3] == jugador) && (casillaOcupada[(i+1)%3][j+2] == jugador)) {
+        if((casillaOcupada[i][j] == jugador) && (casillaOcupada[(i+2)%3][(j+1)%3] == jugador) && (casillaOcupada[(i+1)%3][(j+2)%3] == jugador)) {
             return jugador;
         } else {
             return Constants.SEGUIRJUGANDO;
