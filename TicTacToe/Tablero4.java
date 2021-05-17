@@ -171,10 +171,9 @@ public class Tablero4 extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, " Press alt + m(Menu) / r(Restart) / s(Sound on/off) / e(Exit)", "Options", 1);//Mostaramos la ventana emergente con los comandos
         } else {
             JButton casilla = (JButton) e.getSource();
-            if (casillasOcupadas[obtenerPosX(casilla.getY())][obtenerPosY(casilla.getX())] == Constants.CASILLAVACIA) {
                 int x = obtenerPosY(casilla.getX());
                 int y = obtenerUltimaFila(x);
-                System.out.println(x + " " + y);
+                if (y != -1) {
                 if (turno % 2 == 0) {//Si es el turno de roja
                     casillas[x][y].setIcon(new ImageIcon(roja.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
                 } else if (turno % 2 != 0) {//Si es el turno de amarilla
@@ -187,13 +186,13 @@ public class Tablero4 extends JPanel implements ActionListener {
     }
 
     private int obtenerUltimaFila(int j) {
-        for (int i = 5; i > 0; i--) {
+        for (int i = 5; i >= 0; i--) {
             if (casillasOcupadas[i][j] == 0) {
                 ocuparCasilla(i, j);
                 return i;
             }
         }
-        return 0;
+        return -1;
     }
 
     private int obtenerPosY(int pos) {
@@ -223,34 +222,7 @@ public class Tablero4 extends JPanel implements ActionListener {
         }
         return i;
     }
-    private int obtenerPosX(int pos) {
-        int i = 0;
-        switch (pos) {
-            case Constants.Y1:
-                i = 0;
-                break;
-            case Constants.Y2:
-                i = 1;
-                break;
-            case Constants.Y3:
-                i = 2;
-                break;
-                case Constants.Y4:
-                i = 3;
-                break;
-            case Constants.Y5:
-                i = 4;
-                break;
-            case Constants.Y6:
-                i = 5;
-                break;
-            case Constants.Y7:
-                i = 6;
-                break;
-        }
-        return i;
-    }
-
+    
     private void ocuparCasilla(int i, int j) {
         if (turno % 2 != 0) {
             casillasOcupadas[i][j] = Constants.JUGADORX;
