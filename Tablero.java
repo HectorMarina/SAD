@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class MiTablero extends JPanel implements ActionListener {
+public class Tablero extends JPanel implements ActionListener {
 
     private final JButton[][] casillas = new JButton[Constants.FILAS][Constants.COLUMNAS];//Creamos las casillas
     private int casillaOcupada[][] = {{0, 0, 0},
@@ -45,7 +45,7 @@ public class MiTablero extends JPanel implements ActionListener {
     private int turnoInicial = 0;
     private int contadorCasillas = 0;
 
-    public MiTablero() {
+    public Tablero() {
         iniciarComponentes();
     }
 
