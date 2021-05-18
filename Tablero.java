@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class Tablero extends JPanel implements ActionListener {
+public class MiTablero extends JPanel implements ActionListener {
 
     private final JButton[][] casillas = new JButton[Constants.FILAS][Constants.COLUMNAS];//Creamos las casillas
     private int casillaOcupada[][] = {{0, 0, 0},
@@ -42,10 +42,10 @@ public class Tablero extends JPanel implements ActionListener {
     public String nombre1 = "";
     public String nombre2 = "";
     public int partida;
-    private boolean ganador = false;
     private int turnoInicial = 0;
+    private int contadorCasillas = 0;
 
-    public Tablero() {
+    public MiTablero() {
         iniciarComponentes();
     }
 
@@ -131,24 +131,12 @@ public class Tablero extends JPanel implements ActionListener {
             casillaOcupada[i][j] = Constants.JUGADORO;
         }
     }
-
-    private boolean comprobarEmpate() {
-        int contador = 0;
-        for (int i = 0; i < Constants.FILAS; i++) {
-            for (int j = 0; j < Constants.COLUMNAS; j++) {
-                if (casillaOcupada[i][j] != 0 && ganador == false) {
-                    contador++;
-                }
-            }
-        }
-        return contador == 9;
-    }
-
+    
     private void estadoDelJuego(int jugador) {
-        if (!comprobarEmpate()) {
+        if (contadorCasillas < 9) {
             if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
                 ganadorJugada(jugador);
-                
+
             }
         } else {
             JOptionPane.showMessageDialog(null, "Empate");
@@ -203,7 +191,6 @@ public class Tablero extends JPanel implements ActionListener {
                 jugadorO.setText(nombre2 + "(O): " + marcadorO);
                 break;
         }
-        ganador = true;
         cambioDeTurno(jugador);
         restartPartida();
     }
@@ -246,6 +233,7 @@ public class Tablero extends JPanel implements ActionListener {
                 }
             }
             turno++;//Pasamos el turno
+            contadorCasillas++;
             comprobarGanador();
         }
     }
@@ -331,10 +319,10 @@ public class Tablero extends JPanel implements ActionListener {
             for (int j = 0; j < Constants.COLUMNAS; j++) {//Ponemos todas las casillas vacias otra vez
                 casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
                 casillaOcupada[i][j] = Constants.CASILLAVACIA;
-                ganador = false;
             }
         }
         turnoInicial++;
+        contadorCasillas = 0;
     }
 
     private void restartCompeticion() {
@@ -343,15 +331,15 @@ public class Tablero extends JPanel implements ActionListener {
                 casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
                 casillas[i][j].setEnabled(true);
                 casillaOcupada[i][j] = Constants.CASILLAVACIA;
-                marcadorX = 0;//Restablecemos los marcadores y el turno
-                marcadorO = 0;
-                turno = 0;
-                turnoInicial = 0;
-                jugadorX.setText(nombre1 + "(X): " + marcadorX);
-                jugadorO.setText(nombre2 + "(O): " + marcadorO);
-                ganador = false;
             }
         }
+        marcadorX = 0;//Restablecemos los marcadores y el turno
+        marcadorO = 0;
+        turno = 0;
+        turnoInicial = 0;
+        jugadorX.setText(nombre1 + "(X): " + marcadorX);
+        jugadorO.setText(nombre2 + "(O): " + marcadorO);
+        contadorCasillas = 0;
     }
 
     private void reproducirSonido(boolean sonido) {
@@ -389,10 +377,11 @@ public class Tablero extends JPanel implements ActionListener {
             }
         }
     }
-    private void cambioDeTurno(int jugador){
-        if(jugador == Constants.JUGADORX && turnoInicial%2 != 0){
+
+    private void cambioDeTurno(int jugador) {
+        if (jugador == Constants.JUGADORX && turnoInicial % 2 != 0) {
             turno++;
-        }else if(jugador == Constants.JUGADORO && turnoInicial%2 == 0){
+        } else if (jugador == Constants.JUGADORO && turnoInicial % 2 == 0) {
             turno++;
         }
     }
