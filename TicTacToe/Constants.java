@@ -22,18 +22,20 @@ public class Constants {
     public static final int X5 = 280;
     public static final int X6 = 330;
     public static final int X7 = 380;
-    public static final int Y1 = 48;
-    public static final int Y2 = 104;
-    public static final int Y3 = 160;
-    public static final int Y4 = 215;
-    public static final int Y5 = 273;
-    public static final int Y6 = 329;
-    public static final int Y7 = 370;
+    public static final int Y1 = 73;
+    public static final int Y2 = 129;
+    public static final int Y3 = 189;
+    public static final int Y4 = 240;
+    public static final int Y5 = 298;
+    public static final int Y6 = 354;
+    public static final int Y7 = 395;
     public static final Font LETRAMENUOPCIONES = new Font("arial", Font.BOLD, 12);
     public static final Font LETRANOMBRES = new Font("arial", Font.BOLD, 20);
     public static final int CASILLAVACIA = 0;
     public static final int JUGADORX = 1;
     public static final int JUGADORO = 2;
+    public static final int JUGADORR = 1;
+    public static final int JUGADORA = 2;
     public static final int SEGUIRJUGANDO = -1;
     public static final int EMPATE = -2;
 }
