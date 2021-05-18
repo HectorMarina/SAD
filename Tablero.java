@@ -39,11 +39,11 @@ public class Tablero extends JPanel implements ActionListener {
     private boolean sound = false;
     public int marcadorX = 0;
     public int marcadorO = 0;
-    private int contadorCasillas = 0;
     public String nombre1 = "";
     public String nombre2 = "";
     public int partida;
     private boolean ganador = false;
+    private int turnoInicial = 0;
 
     public Tablero() {
         iniciarComponentes();
@@ -148,6 +148,7 @@ public class Tablero extends JPanel implements ActionListener {
         if (!comprobarEmpate()) {
             if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
                 ganadorJugada(jugador);
+                
             }
         } else {
             JOptionPane.showMessageDialog(null, "Empate");
@@ -195,7 +196,6 @@ public class Tablero extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
                 marcadorX++;
                 jugadorX.setText(nombre1 + "(X): " + marcadorX);
-
                 break;
             case Constants.JUGADORO:
                 JOptionPane.showMessageDialog(null, "Ha ganado el Jugador O");
@@ -204,6 +204,7 @@ public class Tablero extends JPanel implements ActionListener {
                 break;
         }
         ganador = true;
+        cambioDeTurno(jugador);
         restartPartida();
     }
 
@@ -329,12 +330,11 @@ public class Tablero extends JPanel implements ActionListener {
         for (int i = 0; i < Constants.FILAS; i++) {
             for (int j = 0; j < Constants.COLUMNAS; j++) {//Ponemos todas las casillas vacias otra vez
                 casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
-                casillas[i][j].setEnabled(true);
                 casillaOcupada[i][j] = Constants.CASILLAVACIA;
-                contadorCasillas = 0;
                 ganador = false;
             }
         }
+        turnoInicial++;
     }
 
     private void restartCompeticion() {
@@ -343,10 +343,10 @@ public class Tablero extends JPanel implements ActionListener {
                 casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
                 casillas[i][j].setEnabled(true);
                 casillaOcupada[i][j] = Constants.CASILLAVACIA;
-                contadorCasillas = 0;
                 marcadorX = 0;//Restablecemos los marcadores y el turno
                 marcadorO = 0;
                 turno = 0;
+                turnoInicial = 0;
                 jugadorX.setText(nombre1 + "(X): " + marcadorX);
                 jugadorO.setText(nombre2 + "(O): " + marcadorO);
                 ganador = false;
@@ -387,6 +387,13 @@ public class Tablero extends JPanel implements ActionListener {
             } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
                 System.out.println("" + ex);
             }
+        }
+    }
+    private void cambioDeTurno(int jugador){
+        if(jugador == Constants.JUGADORX && turnoInicial%2 != 0){
+            turno++;
+        }else if(jugador == Constants.JUGADORO && turnoInicial%2 == 0){
+            turno++;
         }
     }
 }
