@@ -47,10 +47,10 @@ public class Tablero4 extends JPanel implements ActionListener {
     public String nombre1 = "";
     public String nombre2 = "";
     public int partida;
+    private boolean ganador = false;
 
     public Tablero4() {
         iniciarComponentes();
-
     }
 
     private void iniciarComponentes() {
@@ -67,23 +67,23 @@ public class Tablero4 extends JPanel implements ActionListener {
 
     private void putTablero() {
         //Etiqueta tipo Texto
-        JLabel titulo = new JLabel("Tic Tac Toe");//Creamos el label
+        JLabel titulo = new JLabel("Connect 4");//Creamos el label
         titulo.setFont(new Font("arial", Font.BOLD, 30));//Establecemos tipo de fuente y  tamaño
-        titulo.setBounds(110, 10, 300, 80);//Establecemos el tamaño y posicion de la etiqueta
+        titulo.setBounds(110, 0, 300, 80);//Establecemos el tamaño y posicion de la etiqueta
         titulo.setHorizontalAlignment(SwingConstants.CENTER);//Establecemos la alineacion horizontal del texto (Se puede poner en el constructor)
-
+        this.add(titulo);
         //Etiqueta tipo imagen
         ImageIcon imagen = new ImageIcon("tablero4.png");//Creamos una imagen
         JLabel tablero = new JLabel(); //Creamos el label
-        tablero.setBounds(80, 40, 350, 350);//Ponemos el tamaño y posición del label
+        tablero.setBounds(80, 65, 350, 350);//Ponemos el tamaño y posición del label
         tablero.setIcon(new ImageIcon(imagen.getImage().getScaledInstance(tablero.getWidth(), tablero.getHeight(), Image.SCALE_SMOOTH)));//Estabelecemos medidaas de la imagen y la adaptacmos al label
         //this.add(titulo);//Añadimos las etiquetas al panel
         this.add(tablero);
 
         //Etiqueta tipo texto
-        jugadorRojo.setBounds(120, 400, 200, 25);//Posicionamos y dimensionamos los nombres de los jugadores
+        jugadorRojo.setBounds(120, 420, 200, 25);//Posicionamos y dimensionamos los nombres de los jugadores
         jugadorRojo.setFont(Constants.LETRANOMBRES);//Cambiamos la fuente
-        jugadorAmarillo.setBounds(290, 400, 200, 25);
+        jugadorAmarillo.setBounds(290, 420, 200, 25);
         jugadorAmarillo.setFont(Constants.LETRANOMBRES);
         this.add(jugadorRojo);//Añadimos los nombres al panel
         this.add(jugadorAmarillo);
@@ -171,18 +171,62 @@ public class Tablero4 extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, " Press alt + m(Menu) / r(Restart) / s(Sound on/off) / e(Exit)", "Options", 1);//Mostaramos la ventana emergente con los comandos
         } else {
             JButton casilla = (JButton) e.getSource();
-                int x = obtenerPosY(casilla.getX());
-                int y = obtenerUltimaFila(x);
-                if (y != -1) {
-                if (turno % 2 == 0) {//Si es el turno de roja
-                    casillas[x][y].setIcon(new ImageIcon(roja.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
-                } else if (turno % 2 != 0) {//Si es el turno de amarilla
-                    casillas[x][y].setIcon(new ImageIcon(amarilla.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+            int x = obtenerPosY(casilla.getX());
+            int y = obtenerUltimaFila(x);
+            if (y != -1) {
+                if (turno % 2 == 0) {//Si es el turno de Rojo
+                    casillas[x][y].setIcon(new ImageIcon(roja.getImage().getScaledInstance(casillas[x][y].getWidth(), casillas[x][y].getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+                    estadoDelJuego(Constants.JUGADORR);
+                } else {//Si es el turno de Amarillo
+                    casillas[x][y].setIcon(new ImageIcon(amarilla.getImage().getScaledInstance(casillas[x][y].getWidth(), casillas[x][y].getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
+                    estadoDelJuego(Constants.JUGADORA);
                 }
-                turno++;//Pasamos el turno
-                reproducirSonido(sound);
+            }
+            turno++;//Pasamos el turno
+            reproducirSonido(sound);
+            System.out.println(x + " " + y);
+            //comprobarGanador();
+        }
+    }
+
+    private boolean comprobarEmpate() {
+        int contador = 0;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (casillasOcupadas[j][i] != 0 && ganador == false) {
+                    contador++;
+                }
             }
         }
+        return contador == 42;
+    }
+
+    private void estadoDelJuego(int jugador) {
+        if (!comprobarEmpate()) {
+            if (/*comprobarFila(jugador) == jugador || */comprobarColumna(jugador) == jugador /*|| comprobarDiagonalADerechas(jugador) == jugador|| comprobarDiagonalAIzquierdas(jugador) == jugador*/) {
+                ganadorJugada(jugador);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Empate");
+            restart();
+        }
+    }
+
+    private void ganadorJugada(int jugador) {
+        switch (jugador) {
+            case Constants.JUGADORR:
+                JOptionPane.showMessageDialog(null, "Ha ganado el Jugador Rojo");
+                marcadorRojo++;
+                jugadorRojo.setText(nombre1 + "(R): " + marcadorRojo);
+
+                break;
+            case Constants.JUGADORA:
+                JOptionPane.showMessageDialog(null, "Ha ganado el Jugador Amarillo");
+                marcadorAmarillo++;
+                jugadorAmarillo.setText(nombre2 + "(A): " + marcadorAmarillo);
+                break;
+        }
+        restart();
     }
 
     private int obtenerUltimaFila(int j) {
@@ -222,12 +266,12 @@ public class Tablero4 extends JPanel implements ActionListener {
         }
         return i;
     }
-    
+
     private void ocuparCasilla(int i, int j) {
-        if (turno % 2 != 0) {
-            casillasOcupadas[i][j] = Constants.JUGADORX;
+        if (turno % 2 == 0) {
+            casillasOcupadas[i][j] = Constants.JUGADORR;
         } else {
-            casillasOcupadas[i][j] = Constants.JUGADORO;
+            casillasOcupadas[i][j] = Constants.JUGADORA;
         }
     }
 
@@ -263,11 +307,11 @@ public class Tablero4 extends JPanel implements ActionListener {
     }
 
     private void restart() {
-        for (int i = 0; i < Constants.COLUMNAS4; i++) {
-            for (int j = 0; j < Constants.FILAS4; j++) {//Ponemos todas las casillas vacias otra vez
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {//Ponemos todas las casillas vacias otra vez
+                casillasOcupadas[j][i] = Constants.CASILLAVACIA;
                 casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
-                casillas[i][j].setEnabled(true);
-                casillasOcupadas[i][j] = Constants.CASILLAVACIA;
+
             }
         }
     }
@@ -288,5 +332,50 @@ public class Tablero4 extends JPanel implements ActionListener {
                 System.out.println("" + ex);
             }
         }
+    }
+
+    private int comprobarFila(int jugador) {
+        for(int i = 0; i < 6; i++){
+            for(int j = 0; j < 4; j++){
+                if(casillasOcupadas[i][j] == jugador && casillasOcupadas[i][j+1] == jugador && casillasOcupadas[i][j+2] == jugador && casillasOcupadas[i][j+3] == jugador){
+                    return jugador;
+            }
+            }
+        }
+                
+        return 0;
+    }
+
+    private int comprobarColumna(int jugador) {
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 6; j++){
+                if(casillasOcupadas[i][j] == jugador && casillasOcupadas[i + 1][j] == jugador && casillasOcupadas[i + 2][j] == jugador && casillasOcupadas[i + 3][j] == jugador){
+                    return jugador;
+            }
+            }
+        }                
+        return 0;
+    }
+    
+    private int comprobarDiagonalADerechas(int jugador){
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 3; j++){
+                if(casillasOcupadas[i][j] == jugador && casillasOcupadas[i + 1][j + 1] == jugador && casillasOcupadas[i + 2][j + 2] == jugador && casillasOcupadas[i + 3][j + 3] == jugador){
+                    return jugador;
+            }
+            }
+        }                
+        return 0;
+    }
+    
+    private int comprobarDiagonalAIzquierdas(int jugador){
+        for(int i = 3; i < 7; i++){
+            for(int j = 0; j < 3; j++){
+                if(casillasOcupadas[i][j] == jugador && casillasOcupadas[i + 1][j - 1] == jugador && casillasOcupadas[i + 2][j - 2] == jugador && casillasOcupadas[i + 3][j - 3] == jugador){
+                    return jugador;
+            }
+            }
+        }                
+        return 0;
     }
 }
