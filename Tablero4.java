@@ -1,4 +1,4 @@
-package main;
+package TicTacToe;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,13 +13,12 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class Tablero4 extends JFrame implements ActionListener {
+public class Tablero4 extends JPanel implements ActionListener {
 
     private final JButton[][] casillas = new JButton[7][6];//Creamos las casillas
 
@@ -51,13 +50,7 @@ public class Tablero4 extends JFrame implements ActionListener {
     private boolean ganador = false;
 
     public Tablero4() {
-        this.setSize(700, 500);//Establecemos el tamaño de la ventana
-        this.setTitle("Tic Tac Toe");//Establecemos el titulo de la ventana
-        this.setBackground(Color.WHITE);//Establecemos el fondo de la ventana
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);//Hacer que acabe el porgrama cuando cerramos la ventana
         iniciarComponentes();
-        this.setLocationRelativeTo(null);//Ponemos la ventana en el centro de la pantalla
-
     }
 
     private void iniciarComponentes() {
