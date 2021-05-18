@@ -148,7 +148,6 @@ public class Tablero extends JPanel implements ActionListener {
         if (!comprobarEmpate()) {
             if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
                 ganadorJugada(jugador);
-                ganador = true;
             }
         } else {
             JOptionPane.showMessageDialog(null, "Empate");
@@ -190,8 +189,8 @@ public class Tablero extends JPanel implements ActionListener {
         return 0;
     }
 
-    private void ganadorJugada(int ganador) {
-        switch (ganador) {
+    private void ganadorJugada(int jugador) {
+        switch (jugador) {
             case Constants.JUGADORX:
                 JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
                 marcadorX++;
@@ -203,10 +202,8 @@ public class Tablero extends JPanel implements ActionListener {
                 marcadorO++;
                 jugadorO.setText(nombre2 + "(O): " + marcadorO);
                 break;
-            default:
-                JOptionPane.showMessageDialog(null, "Empate");
-                break;
         }
+        ganador = true;
         restartPartida();
     }
 
@@ -238,13 +235,11 @@ public class Tablero extends JPanel implements ActionListener {
                     casilla.setName(nombre1);
                     comprobarPosicion(obtenerPosY(casilla.getX()), obtenerPosX(casilla.getY()), nombre1);
                     estadoDelJuego(Constants.JUGADORX);
-                    contadorCasillas++;
                 } else {//Si es el turno de O
                     casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
                     casilla.setName(nombre2);
                     comprobarPosicion(obtenerPosY(casilla.getX()), obtenerPosX(casilla.getY()), nombre2);
                     estadoDelJuego(Constants.JUGADORO);
-                    contadorCasillas++;
                 }
             }
             turno++;//Pasamos el turno
