@@ -131,7 +131,7 @@ public class Tablero extends JPanel implements ActionListener {
             casillaOcupada[i][j] = Constants.JUGADORO;
         }
     }
-    
+
     private void estadoDelJuego(int jugador) {
         if (contadorCasillas < 9) {
             if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
