@@ -11,9 +11,9 @@ import javax.swing.SwingConstants;
 public class Menu extends JLabel {
 
     JPanel panel = new JPanel();
-    JLabel titulo = new JLabel("Tic Tac Toe");//Creamos el label
-    JButton start2 = new JButton("3 en raya");
-    JButton start1 = new JButton("4 en raya");
+    JLabel titulo = new JLabel("Tic Tac Toe & Connect4");//Creamos el label
+    JButton start2 = new JButton("Tic Tac Toe");
+    JButton start1 = new JButton("Connect4");
     JButton exit = new JButton("Salir");
     ImageIcon gif = new ImageIcon("menu.gif");//Creamos un icono gif
     public Menu() {
@@ -38,7 +38,7 @@ public class Menu extends JLabel {
 
     private void putLabel() {
         titulo.setFont(new Font("arial", Font.BOLD, 30));//Establecemos tipo de fuente y  tamaño
-        titulo.setBounds(80, 10, 300, 80);//Establecemos el tamaño y posicion de la etiqueta
+        titulo.setBounds(37, 10, 400, 80);//Establecemos el tamaño y posicion de la etiqueta
         titulo.setHorizontalAlignment(SwingConstants.CENTER);//Establecemos la alineacion horizontal del texto (Se puede poner en el constructor)
 
         JLabel tablero = new JLabel(gif);
@@ -61,7 +61,7 @@ public class Menu extends JLabel {
         start1.setFont(new Font("arial", Font.BOLD, 25));//Ponemos el tipo de letra y tamaño
         start2.setFont(new Font("arial", Font.BOLD, 25));
         exit.setFont(new Font("arial", Font.BOLD, 25));
-        panel.add(start1);
+        panel.add(start1);//Añadimos los botones al panel
         panel.add(start2);
         panel.add(exit);
     }
