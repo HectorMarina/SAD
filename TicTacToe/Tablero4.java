@@ -295,7 +295,7 @@ public class Tablero4 extends JPanel implements ActionListener {
     private void menuOpciones() {
         menu.setBounds(515, 120, 100, 20);//Dimensionamos los botones y los posicionamos
         restart.setBounds(515, 170, 100, 20);
-        sonido.setBounds(515, 320, 25, 20);
+        sonido.setBounds(550, 320, 25, 20);
         exit.setBounds(515, 270, 100, 20);
         opciones.setBounds(515, 220, 100, 20);
         menu.setBackground(Color.WHITE);//
