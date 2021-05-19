@@ -204,11 +204,6 @@ public class Tablero extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(restart)) {//Si el boton es restart
             restartCompeticion();
-            marcadorX = 0;//Restablecemos los marcadores y el turno
-            marcadorO = 0;
-            jugadorX.setText(nombre1 + "(X): " + marcadorX);
-            jugadorO.setText(nombre2 + "(O): " + marcadorO);
-            turno = 0;
         } else if (e.getSource().equals(exit)) {//Si el boton es exit
             System.exit(0);//Salimos y paramos el programa
         } else if (e.getSource().equals(sonido)) {//Si el boton es sonido
