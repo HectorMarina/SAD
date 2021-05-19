@@ -58,6 +58,7 @@ public class Tablero extends JPanel implements ActionListener{
     JButton exit = new JButton("Exit");
     JButton opciones = new JButton("Options");
     private boolean sound = false;
+    private boolean ganador = false;
     public int marcadorX = 0;
     public int marcadorO = 0;
     public String nombre1 = "";
@@ -157,11 +158,13 @@ public class Tablero extends JPanel implements ActionListener{
         if (contadorCasillas < 9) {
             if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
                 ganadorJugada(jugador);
-
+                ganador = true;
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Empate");
-            restartPartida();
+            if(contadorCasillas==9 && ganador==false) {
+                JOptionPane.showMessageDialog(null, "Empate");
+                restartPartida();
+            }
         }
     }
 
@@ -296,7 +299,7 @@ public class Tablero extends JPanel implements ActionListener{
     private void menuOpciones() {
         menu.setBounds(450, 120, 100, 20);//Dimensionamos los botones y los posicionamos
         restart.setBounds(450, 170, 100, 20);
-        sonido.setBounds(500, 320, 25, 20);
+        sonido.setBounds(485, 320, 25, 20);
         exit.setBounds(450, 270, 100, 20);
         opciones.setBounds(450, 220, 100, 20);
         menu.setBackground(Color.WHITE);//
@@ -349,6 +352,7 @@ public class Tablero extends JPanel implements ActionListener{
         }
         turnoInicial++;
         contadorCasillas = 0;
+        ganador = false;
     }
 
     private void restartCompeticion() {
@@ -366,6 +370,7 @@ public class Tablero extends JPanel implements ActionListener{
         jugadorX.setText(nombre1 + "(X): " + marcadorX);
         jugadorO.setText(nombre2 + "(O): " + marcadorO);
         contadorCasillas = 0;
+        ganador = false;
     }
 
     private void reproducirSonido(boolean sonido) {
