@@ -1,12 +1,23 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package TicTacToe;
 
 import java.awt.Font;
 
+/**
+ *
+ * @author Marina
+ */
 public class Constants {
     public static final int FILAS = 3;
     public static final int COLUMNAS = 3;
+    public static final int NUMCASILLAS = FILAS*COLUMNAS;
     public static final int FILAS4 = 6;
     public static final int COLUMNAS4 = 7;
+    public static final int NUMCASILLAS4 = FILAS4*COLUMNAS4;
     public static final int SQUARE = 75;
     public static final int SQUARE4 = 50;
     public static final int X11 = 94;
