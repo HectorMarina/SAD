@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package TicTacToe;
 
 import java.awt.Color;
@@ -14,19 +19,24 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/**
+ *
+ * @author Marina
+ */
 public class Tablero4 extends JPanel implements ActionListener {
-
+    
     private final JButton[][] casillas = new JButton[7][6];//Creamos las casillas
 
     private final ImageIcon casillaVacia = new ImageIcon("casillaVacia4.png");//Creamos la imagen de casilla vacía
     private final ImageIcon roja = new ImageIcon("rojo.png");//Creamos la imagen de casilla X
     private final ImageIcon amarilla = new ImageIcon("amarillo.png");//Creamos la imagen de casilla O
+    private final ImageIcon sonidoOn = new ImageIcon("sonidoOn.png");
+    private final ImageIcon sonidoOff = new ImageIcon("sonidoOff.png");
     private int turno = 0;
     private int casillasOcupadas[][] = {{0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0},
@@ -38,7 +48,8 @@ public class Tablero4 extends JPanel implements ActionListener {
     JLabel jugadorAmarillo = new JLabel();
     JButton restart = new JButton("Restart");
     JButton menu = new JButton("Menu");
-    JButton sonido = new JButton("Sound on");
+    //JButton sonido = new JButton("Sound on");
+    JButton sonido = new JButton();
     JButton exit = new JButton("Exit");
     JButton opciones = new JButton("Options");
     private boolean sound = false;
@@ -166,9 +177,11 @@ public class Tablero4 extends JPanel implements ActionListener {
         } else if (e.getSource().equals(sonido)) {//Si el boton es sonido
             sound = !sound;//Cambiamos la variable sonido
             if (!sound) {
-                sonido.setText("Sonido off");//Cambiamos el label dependiendo de sonido
+                //sonido.setText("Sonido off");//Cambiamos el label dependiendo de sonido
+                sonido.setIcon(new ImageIcon(sonidoOff.getImage().getScaledInstance(sonido.getWidth(), sonido.getHeight(), Image.SCALE_SMOOTH)));
             } else {
-                sonido.setText("Sonido on");//Cambiamos el label dependiendo de sonido
+                //sonido.setText("Sonido on");//Cambiamos el label dependiendo de sonido
+                sonido.setIcon(new ImageIcon(sonidoOn.getImage().getScaledInstance(sonido.getWidth(), sonido.getHeight(), Image.SCALE_SMOOTH)));
             }
         } else if (e.getSource().equals(opciones)) {//Si el boton es opciones
             JOptionPane.showMessageDialog(null, " Press alt + m(Menu) / r(Restart) / s(Sound on/off) / e(Exit)", "Options", 1);//Mostaramos la ventana emergente con los comandos
@@ -206,7 +219,7 @@ public class Tablero4 extends JPanel implements ActionListener {
 
     private void estadoDelJuego(int jugador) {
         if (!comprobarEmpate()) {
-            if (comprobarFila(jugador) == jugador /*|| comprobarColumna(jugador) == jugador*/ || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
+            if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
                 ganadorJugada(jugador);
             }
         } else {
@@ -282,9 +295,9 @@ public class Tablero4 extends JPanel implements ActionListener {
     private void menuOpciones() {
         menu.setBounds(515, 120, 100, 20);//Dimensionamos los botones y los posicionamos
         restart.setBounds(515, 170, 100, 20);
-        sonido.setBounds(515, 220, 100, 20);
+        sonido.setBounds(515, 320, 25, 20);
         exit.setBounds(515, 270, 100, 20);
-        opciones.setBounds(515, 320, 100, 20);
+        opciones.setBounds(515, 220, 100, 20);
         menu.setBackground(Color.WHITE);//
         restart.setBackground(Color.WHITE);
         sonido.setBackground(Color.WHITE);
@@ -292,9 +305,10 @@ public class Tablero4 extends JPanel implements ActionListener {
         opciones.setBackground(Color.WHITE);
         menu.setFont(Constants.LETRAMENUOPCIONES);
         restart.setFont(Constants.LETRAMENUOPCIONES);
-        sonido.setFont(Constants.LETRAMENUOPCIONES);
+        //sonido.setFont(Constants.LETRAMENUOPCIONES);
         exit.setFont(Constants.LETRAMENUOPCIONES);
         opciones.setFont(Constants.LETRAMENUOPCIONES);
+        sonido.setIcon(new ImageIcon(sonidoOff.getImage().getScaledInstance(sonido.getWidth(), sonido.getHeight(), Image.SCALE_SMOOTH)));
         restart.addActionListener(this);//Añadimos los actionListener a los botones
         sonido.addActionListener(this);
         exit.addActionListener(this);
@@ -351,7 +365,7 @@ public class Tablero4 extends JPanel implements ActionListener {
 
     private int comprobarColumna(int jugador) {
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 6; j++) {
+            for (int j = 0; j < 7; j++) {
                 if (casillasOcupadas[i][j] == jugador && casillasOcupadas[i + 1][j] == jugador && casillasOcupadas[i + 2][j] == jugador && casillasOcupadas[i + 3][j] == jugador) {
                     return jugador;
                 }
@@ -386,10 +400,12 @@ public class Tablero4 extends JPanel implements ActionListener {
         Icon icono = new ImageIcon("trofeore.png");
         if (marcadorRojo == partida) {
             sonidoVictoria(sound);
+            sonidoAplausos(sound);
             JOptionPane.showMessageDialog(null, "Felicidades " + nombre1 + "(R) Has ganado :)", "Victoria", JOptionPane.PLAIN_MESSAGE, icono);
             restartCompeticion();
         } else if (marcadorAmarillo == partida) {
             sonidoVictoria(sound);
+            sonidoAplausos(sound);
             JOptionPane.showMessageDialog(null, "Felicidades " + nombre2 + "(A) Has ganado :)", "Victoria", JOptionPane.PLAIN_MESSAGE, icono);
             restartCompeticion();
         }
@@ -421,6 +437,24 @@ public class Tablero4 extends JPanel implements ActionListener {
 
                 // Se carga con un fichero wav
                 s.open(AudioSystem.getAudioInputStream(new File("win.wav")));
+
+                // Comienza la reproducción
+                s.start();
+
+            } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+                System.out.println("" + ex);
+            }
+        }
+    }
+    
+    private void sonidoAplausos(boolean sonido) {
+        if (sonido) {
+            try {
+                // Se obtiene un Clip de sonido
+                Clip s = AudioSystem.getClip();
+
+                // Se carga con un fichero wav
+                s.open(AudioSystem.getAudioInputStream(new File("aplausos.wav")));
 
                 // Comienza la reproducción
                 s.start();
