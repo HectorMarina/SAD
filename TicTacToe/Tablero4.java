@@ -48,7 +48,6 @@ public class Tablero4 extends JPanel implements ActionListener {
     public String nombre1 = "";//Casilla de tipo Amarillo
     public String nombre2 = "";//Casilla de tipo Rojo
     public int partida;//Numero de partidas para ganar
-    private boolean ganador = false;//Variable para saber si hay un ganador
     private int turnoInicial = 0;//Variable para saber quien ha empezado
     private int contadorCasillas = 0;//Variable para contar las casillas ocupadas
 
@@ -162,7 +161,7 @@ public class Tablero4 extends JPanel implements ActionListener {
         } else if (e.getSource().equals(exit)) {//Si el boton es exit
             System.exit(0);//Salimos y paramos el programa
         } else if (e.getSource().equals(sonido)) {//Si el boton es sonido
-             sound = !sound;//Cambiamos la variable sonido
+            sound = !sound;//Cambiamos la variable sonido
             if (!sound) {
                 //sonido.setText("Sonido off");//Cambiamos el label dependiendo de sonido
                 sonido.setIcon(new ImageIcon(sonidoOff.getImage().getScaledInstance(sonido.getWidth(), sonido.getHeight(), Image.SCALE_SMOOTH)));
@@ -194,13 +193,17 @@ public class Tablero4 extends JPanel implements ActionListener {
     }
 
     private void estadoDelJuego(int jugador) {
-        if (contadorCasillas < 43) {//Comprobamos si no hay empate
+        if (contadorCasillas < Constants.NUMCASILLAS4) {//Comprobamos si no hay empate
             if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
                 ganadorJugada(jugador);//Hay un ganador
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Empate");//Mostramos el panel de empate y hacemos restart
-            restartPartida();
+            if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
+                ganadorJugada(jugador);//Hay un ganador
+            } else {
+                JOptionPane.showMessageDialog(null, "Empate");//Mostramos el panel de empate y hacemos restart
+                restartPartida();
+            }
         }
     }
 
