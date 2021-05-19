@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package TicTacToe;
 
 import java.awt.Color;
@@ -19,43 +24,49 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class Tablero extends JPanel implements ActionListener {
+/**
+ *
+ * @author Marina
+ */
 
+public class Tablero extends JPanel implements ActionListener{
+    
     private final JButton[][] casillas = new JButton[Constants.FILAS][Constants.COLUMNAS];//Creamos las casillas
     private int casillaOcupada[][] = {{0, 0, 0},
     {0, 0, 0},
-    {0, 0, 0}};//Matriz para controlar las casillas
+    {0, 0, 0}};
     ImageIcon casillaVacia = new ImageIcon("casillaVacia.png");//Creamos la imagen de casilla vacía
     ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
     ImageIcon casillaO = new ImageIcon("o.png");//Creamos la imagen de casilla O
-    private final ImageIcon sonidoOn = new ImageIcon("sonidoOn.png");//Creamos la imagen de sonido encendido
-    private final ImageIcon sonidoOff = new ImageIcon("sonidoOff.png");//Creamos la imagen de sonido apagado
-    private int turno = 0;//Variable para manejar el turno
-    JLabel jugadorX = new JLabel();//Label  del jugador X
-    JLabel jugadorO = new JLabel();//Label  del jugador O
-    JButton restart = new JButton("Restart");//Boton restart
-    JButton menu = new JButton("Menu");//Boton menu
-    JButton sonido = new JButton("Sound on");//Boton sonido
-    JButton exit = new JButton("Exit");//Boton salir
-    JButton opciones = new JButton("Options");//Boton opciones
-    private boolean sound = false;//Variable para manejar el sonido
-    public int marcadorX = 0;//Marcador jugador X
-    public int marcadorO = 0;//Marcador jugador O
-    public String nombre1 = "";//Casilla de tipo X
-    public String nombre2 = "";//Casilla de tipo O
-    public int partida;//Numero de partidas para ganar
-    private int turnoInicial = 0;//Variable para saber quien ha empezado
-    private int contadorCasillas = 0;//Variable para contar las casillas ocupadas
+    private final ImageIcon sonidoOn = new ImageIcon("sonidoOn.png");
+    private final ImageIcon sonidoOff = new ImageIcon("sonidoOff.png");
+    private int turno = 0;
+    JLabel jugadorX = new JLabel();
+    JLabel jugadorO = new JLabel();
+    JButton restart = new JButton("Restart");
+    JButton menu = new JButton("Menu");
+    JButton sonido = new JButton();
+    JButton exit = new JButton("Exit");
+    JButton opciones = new JButton("Options");
+    private boolean sound = false;
+    private boolean ganador = false;
+    public int marcadorX = 0;
+    public int marcadorO = 0;
+    public String nombre1 = "";
+    public String nombre2 = "";
+    public int partida;
+    private int turnoInicial = 0;
+    private int contadorCasillas = 0;
 
     public Tablero() {
         iniciarComponentes();
     }
 
     private void iniciarComponentes() {
-        putPanel();//Pone el panel
-        putTablero();//Pone el tablero y los labels
-        putCasillas();//Pone las casillas en el tablero
-        menuOpciones();//Pone los botones del menu lateral
+        putPanel();
+        putTablero();
+        putCasillas();
+        menuOpciones();
     }
 
     private void putPanel() {
@@ -88,7 +99,7 @@ public class Tablero extends JPanel implements ActionListener {
         this.add(jugadorO);
     }
 
-    private void putCasillas() {//Colocamos las casillas para que coincidan con la imagen del tablero
+    private void putCasillas() {
         int y = 0;
         int x = 0;
         for (int i = 0; i < Constants.FILAS; i++) {
@@ -126,7 +137,7 @@ public class Tablero extends JPanel implements ActionListener {
         }
     }
 
-    private void comprobarPosicion(int i, int j, String nombreCasilla) {//Marcamos la casilla dependiendo de cual sea el que tira
+    private void comprobarPosicion(int i, int j, String nombreCasilla) {
         if (nombreCasilla.equals(nombre1)) {
             casillaOcupada[i][j] = Constants.JUGADORX;
         } else if (nombreCasilla.equals(nombre2)) {
@@ -134,19 +145,30 @@ public class Tablero extends JPanel implements ActionListener {
         }
     }
 
-    private void estadoDelJuego(int jugador) {//Comprobamos el estado del juegoS
-        if (contadorCasillas < 10) {//Comprobamos si hay empate
-            if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
-                ganadorJugada(jugador);//Hay un ganador
+    private boolean comprobarEmpate() {
+        int contador = 0;
+        for (int i = 0; i < Constants.FILAS; i++) {
+            for (int j = 0; j < Constants.COLUMNAS; j++) {
+                if (casillaOcupada[j][i] != 0 && ganador == false) {
+                    contador++;
+                }
+            }
+        }
+        return contador == Constants.NUMCASILLAS;
+    }
 
+    private void estadoDelJuego(int jugador) {
+        if (!comprobarEmpate()) {
+            if (comprobarFila(jugador) == jugador || comprobarColumna(jugador) == jugador || comprobarDiagonalADerechas(jugador) == jugador || comprobarDiagonalAIzquierdas(jugador) == jugador) {
+                ganadorJugada(jugador);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Empate");//Mostramos el panel de empate y hacemos restart
+            JOptionPane.showMessageDialog(null, "Empate");
             restartPartida();
         }
     }
 
-    private int comprobarDiagonalADerechas(int jugador) {//Comprobamos si hay una diagonal a derechas
+    private int comprobarDiagonalADerechas(int jugador) {
         if ((casillaOcupada[0][0] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][2] == jugador)) {
 
             return jugador;
@@ -155,15 +177,15 @@ public class Tablero extends JPanel implements ActionListener {
 
     }
 
-    private int comprobarDiagonalAIzquierdas(int jugador) {//Comprobamos si hay una diagonal a izquierdas
+    private int comprobarDiagonalAIzquierdas(int jugador) {
         if ((casillaOcupada[0][2] == jugador) && (casillaOcupada[1][1] == jugador) && (casillaOcupada[2][0] == jugador)) {
             return jugador;
         }
         return 0;
     }
 
-    private int comprobarFila(int jugador) {//Comprobamos si hay una fila
-        for (int j = 0; j < 3; j++) {
+    private int comprobarFila(int jugador) {
+        for (int j = 0; j < Constants.COLUMNAS; j++) {
             if (casillaOcupada[0][j] == jugador && casillaOcupada[1][j] == jugador && casillaOcupada[2][j] == jugador) {
                 return jugador;
             }
@@ -171,8 +193,8 @@ public class Tablero extends JPanel implements ActionListener {
         return 0;
     }
 
-    private int comprobarColumna(int jugador) {//Comprobamos si hay una columna
-        for (int i = 0; i < 3; i++) {
+    private int comprobarColumna(int jugador) {
+        for (int i = 0; i < Constants.COLUMNAS; i++) {
             if (casillaOcupada[i][0] == jugador && casillaOcupada[i][1] == jugador && casillaOcupada[i][2] == jugador) {
                 return jugador;
             }
@@ -180,7 +202,7 @@ public class Tablero extends JPanel implements ActionListener {
         return 0;
     }
 
-    private void ganadorJugada(int jugador) {//Dependiendo del ganador mostramos un panel u otro y lo añadimos al marcador
+    private void ganadorJugada(int jugador) {
         switch (jugador) {
             case Constants.JUGADORX:
                 JOptionPane.showMessageDialog(null, "Ha ganado el Jugador X");
@@ -193,7 +215,7 @@ public class Tablero extends JPanel implements ActionListener {
                 jugadorO.setText(nombre2 + "(O): " + marcadorO);
                 break;
         }
-        cambioDeTurno(jugador);//Comprobamos el turno para ver quien empezara la suguiente partida y hacemos restart
+        cambioDeTurno(jugador);
         restartPartida();
     }
 
@@ -201,15 +223,10 @@ public class Tablero extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(restart)) {//Si el boton es restart
             restartCompeticion();
-            marcadorX = 0;//Restablecemos los marcadores y el turno
-            marcadorO = 0;
-            jugadorX.setText(nombre1 + "(X): " + marcadorX);
-            jugadorO.setText(nombre2 + "(O): " + marcadorO);
-            turno = 0;
         } else if (e.getSource().equals(exit)) {//Si el boton es exit
             System.exit(0);//Salimos y paramos el programa
         } else if (e.getSource().equals(sonido)) {//Si el boton es sonido
-             sound = !sound;//Cambiamos la variable sonido
+            sound = !sound;//Cambiamos la variable sonido
             if (!sound) {
                 //sonido.setText("Sonido off");//Cambiamos el label dependiendo de sonido
                 sonido.setIcon(new ImageIcon(sonidoOff.getImage().getScaledInstance(sonido.getWidth(), sonido.getHeight(), Image.SCALE_SMOOTH)));
@@ -221,28 +238,28 @@ public class Tablero extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, " Press alt + m(Menu) / r(Restart) / s(Sound on/off) / e(Exit)", "Options", 1);//Mostaramos la ventana emergente con los comandos
         } else {
             JButton casilla = (JButton) e.getSource();
-            if (casillaOcupada[obtenerPosY(casilla.getX())][obtenerPosX(casilla.getY())] == Constants.CASILLAVACIA) {
+            if (casillaOcupada[obtenerFila(casilla.getX())][obtenerColumna(casilla.getY())] == Constants.CASILLAVACIA) {
                 if (turno % 2 == 0) {//Si es el turno de X
                     casilla.setIcon(new ImageIcon(casillaX.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
-                    casilla.setName(nombre1);//Ponemos nombre a la casilla
-                    comprobarPosicion(obtenerPosY(casilla.getX()), obtenerPosX(casilla.getY()), nombre1);//Marcamos la matriz de casilla ocupadas
-                    estadoDelJuego(Constants.JUGADORX);//Miramos el estado del juego
-                    reproducirSonido(sound);//Reproducimos el sonido de la ficha
+                    casilla.setName(nombre1);
+                    comprobarPosicion(obtenerFila(casilla.getX()), obtenerColumna(casilla.getY()), nombre1);
+                    estadoDelJuego(Constants.JUGADORX);
+                    reproducirSonido(sound);
                 } else {//Si es el turno de O
                     casilla.setIcon(new ImageIcon(casillaO.getImage().getScaledInstance(casilla.getWidth(), casilla.getHeight(), Image.SCALE_SMOOTH)));//Colocamos la figura correspondiente X
-                    casilla.setName(nombre2);//Ponemos nombre a la casilla
-                    comprobarPosicion(obtenerPosY(casilla.getX()), obtenerPosX(casilla.getY()), nombre2);//Marcamos la matriz de casilla ocupadas
-                    estadoDelJuego(Constants.JUGADORO);//Miramos el estado del juego
-                    reproducirSonido(sound);//Reproducimos el sonido de la ficha
+                    casilla.setName(nombre2);
+                    comprobarPosicion(obtenerFila(casilla.getX()), obtenerColumna(casilla.getY()), nombre2);
+                    estadoDelJuego(Constants.JUGADORO);
+                    reproducirSonido(sound);
                 }
             }
             turno++;//Pasamos el turno
-            contadorCasillas++;//Casilla ocupada++
-            comprobarGanador();//Comprobamos si alguien ha ganado el campeonato
+            contadorCasillas++;
+            comprobarGanador();
         }
     }
 
-    private int obtenerPosX(int pos) {//Obtenemos la fila y columna a partir de la posicion
+    private int obtenerColumna(int pos) {
         int i = 0;
         switch (pos) {
             case Constants.Y11:
@@ -258,7 +275,7 @@ public class Tablero extends JPanel implements ActionListener {
         return i;
     }
 
-    private int obtenerPosY(int pos) {
+    private int obtenerFila(int pos) {
         int i = 0;
         switch (pos) {
             case Constants.X11:
@@ -280,13 +297,14 @@ public class Tablero extends JPanel implements ActionListener {
         sonido.setBounds(485, 320, 25, 20);
         exit.setBounds(450, 270, 100, 20);
         opciones.setBounds(450, 220, 100, 20);
-        menu.setBackground(Color.WHITE);//Ponemos el fondo blanco del boton
+        menu.setBackground(Color.WHITE);//
         restart.setBackground(Color.WHITE);
         sonido.setBackground(Color.WHITE);
         exit.setBackground(Color.WHITE);
         opciones.setBackground(Color.WHITE);
-        menu.setFont(Constants.LETRAMENUOPCIONES);//Ajustamos la letra y tamaño
+        menu.setFont(Constants.LETRAMENUOPCIONES);
         restart.setFont(Constants.LETRAMENUOPCIONES);
+        //sonido.setFont(Constants.LETRAMENUOPCIONES);
         sonido.setIcon(new ImageIcon(sonidoOff.getImage().getScaledInstance(sonido.getWidth(), sonido.getHeight(), Image.SCALE_SMOOTH)));
         exit.setFont(Constants.LETRAMENUOPCIONES);
         opciones.setFont(Constants.LETRAMENUOPCIONES);
@@ -305,7 +323,7 @@ public class Tablero extends JPanel implements ActionListener {
         this.add(opciones);
     }
 
-    private void comprobarGanador() {//Si alguien ha ganado el numero de partidas para ganar el campeonato salta el panel correspondiente con sonido y hace restart del campeonato
+    private void comprobarGanador() {
         Icon icono = new ImageIcon("trofeore.png");
         if (marcadorX == partida) {
             sonidoVictoria(sound);
@@ -322,13 +340,14 @@ public class Tablero extends JPanel implements ActionListener {
 
     private void restartPartida() {
         for (int i = 0; i < Constants.FILAS; i++) {
-            for (int j = 0; j < Constants.COLUMNAS; j++) {//Ponemos todas las casillas vacias otra vez y restablecemos el turno inicial
+            for (int j = 0; j < Constants.COLUMNAS; j++) {//Ponemos todas las casillas vacias otra vez
                 casillas[i][j].setIcon(new ImageIcon(casillaVacia.getImage().getScaledInstance(casillas[i][j].getWidth(), casillas[i][j].getHeight(), Image.SCALE_SMOOTH)));//Dimensionamos la imagen segun el boton
                 casillaOcupada[i][j] = Constants.CASILLAVACIA;
             }
         }
         turnoInicial++;
         contadorCasillas = 0;
+        ganador = false;
     }
 
     private void restartCompeticion() {
@@ -346,9 +365,10 @@ public class Tablero extends JPanel implements ActionListener {
         jugadorX.setText(nombre1 + "(X): " + marcadorX);
         jugadorO.setText(nombre2 + "(O): " + marcadorO);
         contadorCasillas = 0;
+        ganador = false;
     }
 
-    private void reproducirSonido(boolean sonido) {//Reproducimos sonido de ficha
+    private void reproducirSonido(boolean sonido) {
         if (sonido) {
             try {
                 // Se obtiene un Clip de sonido
@@ -366,7 +386,7 @@ public class Tablero extends JPanel implements ActionListener {
         }
     }
 
-    private void sonidoVictoria(boolean sonido) {//Reproducimos sonido de victoria
+    private void sonidoVictoria(boolean sonido) {
         if (sonido) {
             try {
                 // Se obtiene un Clip de sonido
@@ -383,8 +403,8 @@ public class Tablero extends JPanel implements ActionListener {
             }
         }
     }
-
-    private void sonidoAplausos(boolean sonido) {//Reproducimos sonido de aplausos
+    
+    private void sonidoAplausos(boolean sonido) {
         if (sonido) {
             try {
                 // Se obtiene un Clip de sonido
@@ -402,7 +422,7 @@ public class Tablero extends JPanel implements ActionListener {
         }
     }
 
-    private void cambioDeTurno(int jugador) {//Manejamos el cambio de turno para hacer que cada color empiece una partida cada vez
+    private void cambioDeTurno(int jugador) {
         if (jugador == Constants.JUGADORX && turnoInicial % 2 != 0) {
             turno++;
         } else if (jugador == Constants.JUGADORO && turnoInicial % 2 == 0) {
