@@ -12,8 +12,8 @@ public class Ventana extends JFrame {
     Tablero4 tablero4 = new Tablero4();
 
     public Ventana() {
-        jbInit();
-        activarBotones();
+        jbInit();//Dimensionamos la ventana
+        activarBotones();//Manejamos los botones
     }
 
     private void jbInit() {
@@ -22,49 +22,49 @@ public class Ventana extends JFrame {
         this.setBackground(Color.BLUE);//Establecemos el fondo de la ventana
         this.setLocationRelativeTo(null);//Ponemos la ventana en el centro de la pantalla
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);//Hacer que acabe el porgrama cuando cerramos la ventana
-        this.add(menu);
-        menu.setVisible(true);
+        this.add(menu);//Añdimos el menu a la ventana
+        menu.setVisible(true);//Mostramos el menu
     }
 
     private void activarBotones() {
-        menu.start2.addActionListener((ActionEvent e) -> {
-            tablero.nombre1 = JOptionPane.showInputDialog("Nombre del jugador X");
-            tablero.jugadorX.setText(tablero.nombre1 + "(X): " + tablero.marcadorX);
+        menu.start2.addActionListener((ActionEvent e) -> {//3 en raya
+            tablero.nombre1 = JOptionPane.showInputDialog("Nombre del jugador X");//Pedimos los nombres de los jugadores
+            tablero.jugadorX.setText(tablero.nombre1 + "(X): " + tablero.marcadorX);//Ponemos el marcador
             tablero.nombre2 = JOptionPane.showInputDialog("Nombre del jugador O");
             tablero.jugadorO.setText(tablero.nombre2 + "(O): " + tablero.marcadorO);
-            tablero.partida = Integer.parseInt(JOptionPane.showInputDialog("Número de partidas para ganar"));
-            add(tablero);
+            tablero.partida = Integer.parseInt(JOptionPane.showInputDialog("Número de partidas para ganar"));//Pedimos el numero de partridas para ganar el campeonato
+            add(tablero);//Añadimos el panel tablero a la ventana
             menu.setVisible(false);
-            tablero.setVisible(true);
-            validate();
+            tablero.setVisible(true);//Mostramos el tablero4
+            validate();//Efectuamos los cambios
         });
-        menu.start1.addActionListener((ActionEvent e) -> {
-            tablero4.nombre1 = JOptionPane.showInputDialog("Nombre del jugador Rojo");
+        menu.start1.addActionListener((ActionEvent e) -> {//4 en raya
+            tablero4.nombre1 = JOptionPane.showInputDialog("Nombre del jugador Rojo");//Pedimos los nombres de los jugadores
             tablero4.nombre2 = JOptionPane.showInputDialog("Nombre del jugador Amarillo");
-            tablero4.partida = Integer.parseInt(JOptionPane.showInputDialog("Número de partidas para ganar"));
-            tablero4.jugadorRojo.setText(tablero4.nombre1 + "(R): " + tablero4.marcadorRojo);
+            tablero4.partida = Integer.parseInt(JOptionPane.showInputDialog("Número de partidas para ganar"));//Pedimos el numero de partridas para ganar el campeonato
+            tablero4.jugadorRojo.setText(tablero4.nombre1 + "(R): " + tablero4.marcadorRojo);//Ponemos el marcador
             tablero4.jugadorAmarillo.setText(tablero4.nombre2 + "(A): " + tablero4.marcadorAmarillo);
-            add(tablero4);
+            add(tablero4);//Añadimos el panel tablero4 a la ventana
             menu.setVisible(false);
-            tablero4.setVisible(true);
-            validate();
+            tablero4.setVisible(true);//Mostramos el tablero4
+            validate();//Efectuamos los cambios
         });
         menu.exit.addActionListener((ActionEvent e) -> {
             dispose();
         });
-        tablero.menu.addActionListener((ActionEvent e) -> {
+        tablero.menu.addActionListener((ActionEvent e) -> {//Menu del tablero
             tablero.setVisible(false);
-            menu.setVisible(true);
+            menu.setVisible(true);//Mostramos el menu y reiniciamos los marcadores
             tablero.marcadorX = 0;
             tablero.marcadorO = 0;
-            validate();
+            validate();//Efectuamos los cambios
         });
-        tablero4.menu.addActionListener((ActionEvent e) -> {
+        tablero4.menu.addActionListener((ActionEvent e) -> {//Menu del tablero4
             tablero4.setVisible(false);
-            menu.setVisible(true);
+            menu.setVisible(true);//Mostramos el menu y reiniciamos los marcadores
             tablero4.marcadorRojo = 0;
             tablero4.marcadorAmarillo = 0;
-            validate();
+            validate();//Efectuamos los cambios
         });
     }
 }
