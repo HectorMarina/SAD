@@ -1,8 +1,15 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package TicTacToe;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -14,13 +21,25 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class Tablero extends JPanel implements ActionListener {
+/**
+ *
+ * @author Marina
+ */
 
+public class Tablero extends JPanel implements ActionListener{
+    
     private final JButton[][] casillas = new JButton[Constants.FILAS][Constants.COLUMNAS];//Creamos las casillas
     private int casillaOcupada[][] = {{0, 0, 0},
     {0, 0, 0},
@@ -28,12 +47,14 @@ public class Tablero extends JPanel implements ActionListener {
     ImageIcon casillaVacia = new ImageIcon("casillaVacia.png");//Creamos la imagen de casilla vacía
     ImageIcon casillaX = new ImageIcon("x.png");//Creamos la imagen de casilla X
     ImageIcon casillaO = new ImageIcon("o.png");//Creamos la imagen de casilla O
+    private final ImageIcon sonidoOn = new ImageIcon("sonidoOn.png");
+    private final ImageIcon sonidoOff = new ImageIcon("sonidoOff.png");
     private int turno = 0;
     JLabel jugadorX = new JLabel();
     JLabel jugadorO = new JLabel();
     JButton restart = new JButton("Restart");
     JButton menu = new JButton("Menu");
-    JButton sonido = new JButton("Sound on");
+    JButton sonido = new JButton();
     JButton exit = new JButton("Exit");
     JButton opciones = new JButton("Options");
     private boolean sound = false;
@@ -209,9 +230,11 @@ public class Tablero extends JPanel implements ActionListener {
         } else if (e.getSource().equals(sonido)) {//Si el boton es sonido
             sound = !sound;//Cambiamos la variable sonido
             if (!sound) {
-                sonido.setText("Sonido off");//Cambiamos el label dependiendo de sonido
+                //sonido.setText("Sonido off");//Cambiamos el label dependiendo de sonido
+                sonido.setIcon(new ImageIcon(sonidoOff.getImage().getScaledInstance(sonido.getWidth(), sonido.getHeight(), Image.SCALE_SMOOTH)));
             } else {
-                sonido.setText("Sonido on");//Cambiamos el label dependiendo de sonido
+                //sonido.setText("Sonido on");//Cambiamos el label dependiendo de sonido
+                sonido.setIcon(new ImageIcon(sonidoOn.getImage().getScaledInstance(sonido.getWidth(), sonido.getHeight(), Image.SCALE_SMOOTH)));
             }
         } else if (e.getSource().equals(opciones)) {//Si el boton es opciones
             JOptionPane.showMessageDialog(null, " Press alt + m(Menu) / r(Restart) / s(Sound on/off) / e(Exit)", "Options", 1);//Mostaramos la ventana emergente con los comandos
@@ -273,9 +296,9 @@ public class Tablero extends JPanel implements ActionListener {
     private void menuOpciones() {
         menu.setBounds(450, 120, 100, 20);//Dimensionamos los botones y los posicionamos
         restart.setBounds(450, 170, 100, 20);
-        sonido.setBounds(450, 220, 100, 20);
+        sonido.setBounds(450, 320, 25, 20);
         exit.setBounds(450, 270, 100, 20);
-        opciones.setBounds(450, 320, 100, 20);
+        opciones.setBounds(450, 220, 100, 20);
         menu.setBackground(Color.WHITE);//
         restart.setBackground(Color.WHITE);
         sonido.setBackground(Color.WHITE);
@@ -283,7 +306,8 @@ public class Tablero extends JPanel implements ActionListener {
         opciones.setBackground(Color.WHITE);
         menu.setFont(Constants.LETRAMENUOPCIONES);
         restart.setFont(Constants.LETRAMENUOPCIONES);
-        sonido.setFont(Constants.LETRAMENUOPCIONES);
+        //sonido.setFont(Constants.LETRAMENUOPCIONES);
+        sonido.setIcon(new ImageIcon(sonidoOff.getImage().getScaledInstance(sonido.getWidth(), sonido.getHeight(), Image.SCALE_SMOOTH)));
         exit.setFont(Constants.LETRAMENUOPCIONES);
         opciones.setFont(Constants.LETRAMENUOPCIONES);
         restart.addActionListener(this);//Añadimos los actionListener a los botones
@@ -305,10 +329,12 @@ public class Tablero extends JPanel implements ActionListener {
         Icon icono = new ImageIcon("trofeore.png");
         if (marcadorX == partida) {
             sonidoVictoria(sound);
+            sonidoAplausos(sound);
             JOptionPane.showMessageDialog(null, "Felicidades " + nombre1 + "(X) Has ganado :)", "Victoria", JOptionPane.PLAIN_MESSAGE, icono);
             restartCompeticion();
         } else if (marcadorO == partida) {
             sonidoVictoria(sound);
+            sonidoAplausos(sound);
             JOptionPane.showMessageDialog(null, "Felicidades " + nombre2 + "(O) Has ganado :)", "Victoria", JOptionPane.PLAIN_MESSAGE, icono);
             restartCompeticion();
         }
@@ -368,6 +394,24 @@ public class Tablero extends JPanel implements ActionListener {
 
                 // Se carga con un fichero wav
                 s.open(AudioSystem.getAudioInputStream(new File("win.wav")));
+
+                // Comienza la reproducción
+                s.start();
+
+            } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+                System.out.println("" + ex);
+            }
+        }
+    }
+    
+    private void sonidoAplausos(boolean sonido) {
+        if (sonido) {
+            try {
+                // Se obtiene un Clip de sonido
+                Clip s = AudioSystem.getClip();
+
+                // Se carga con un fichero wav
+                s.open(AudioSystem.getAudioInputStream(new File("aplausos.wav")));
 
                 // Comienza la reproducción
                 s.start();
