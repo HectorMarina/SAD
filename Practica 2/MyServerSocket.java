@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,9 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MyServerSocket extends ServerSocket {
     
     private int port;
-    public static ConcurrentHashMap<String, Server> clients = new ConcurrentHashMap<String, Server>();
+    public Map<String, Server> clients = new ConcurrentHashMap<>();
     
-    public MyServerSocket(int port) {
+    public MyServerSocket(int port) throws IOException {
         this.port = port;
     }
     
@@ -33,7 +34,7 @@ public class MyServerSocket extends ServerSocket {
     
     public void execute() {
         //El serverSocket escucha por el puerto port
-        try(ServerSocket serverSocket = new ServerSocket(port)) {
+        try(ServerSocket serverSocket = new ServerSocket(5000)) {
             System.out.println("El Servidor Chat esta escuchando por el puerto " + port);
             
             //El Servidor Chat mientras escucha por el puerto port
@@ -52,7 +53,7 @@ public class MyServerSocket extends ServerSocket {
         }
     }
     
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         if(args.length < 1) {
             System.out.println("Syntax Error: java MyServerSocket <port-number>");
             System.exit(0);
@@ -62,7 +63,7 @@ public class MyServerSocket extends ServerSocket {
         
         MyServerSocket server = new MyServerSocket(port);
         server.execute();
-    }
+    }*/
     
     public void addUserName(String userName, Server server) {
         clients.put(userName, server);
