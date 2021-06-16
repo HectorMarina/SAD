@@ -16,6 +16,7 @@ public class MySocket extends Socket {
     private Socket socket;
 
     public MySocket(String ipAdd, int port) {
+        //Creamos un socket con la dirección IP y puerto
         try {
             this.socket = new Socket(ipAdd, port);
             this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -27,6 +28,7 @@ public class MySocket extends Socket {
     }
 
     public MySocket(Socket mysocket) {
+        //Socket pasado por parámetro
         try {
             this.socket = mysocket;
             this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -38,10 +40,12 @@ public class MySocket extends Socket {
     }
 
     public void println(String s) {
+        //Método de escriptura utilizando printWriter
         this.writer.println(s);
     }
 
     public String readLine() {
+        //Método de lectura utilizando BufferedReader
         try {
             return this.reader.readLine();
         } catch (IOException e) {
@@ -52,6 +56,7 @@ public class MySocket extends Socket {
     @Override
     public void close() {
         try {
+            //Cerramos el socket, el printWriter y el BufferedReader
             this.socket.close();
             this.writer.close();
             this.reader.close();
