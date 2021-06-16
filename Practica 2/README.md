@@ -11,3 +11,5 @@ Organización de carpetas:
 - MySocket
 
 - MyServerSocket
+
+Para ejecutar el programa, primero ejecutamos el server y después dos clientes. Entonces ya podemos empezar a hablar.
